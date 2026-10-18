@@ -1,14 +1,31 @@
 # Performance notes
 
+## Budget
+
+I set these limits before building, and re-checked them after every change to the page:
+
+| | Limit | Now |
+|---|---|---|
+| JavaScript (gzipped) | 95 kB | 82.9 kB |
+| CSS (gzipped) | 6 kB | 5.2 kB |
+| Font | 30 kB | 27 kB |
+| One logo | 15 kB | 3 to 13 kB |
+| Whole first load (Lighthouse) | 200 KiB | 132 KiB |
+| Lighthouse performance (mobile) | 95 or more | 99 |
+| Cumulative layout shift | 0.05 or less | 0 |
+
+CSS has the least room left (0.8 kB), so a large styling change needs another look at this table.
+
 ## Bundle size (production build)
 
 | File | Raw | Gzip |
 |---|---|---|
-| JavaScript (main) | 247 kB | 76.8 kB |
-| CSS | 15.6 kB | 3.9 kB |
-| Demo controls (loaded only with `?demo=1`) | 1.0 kB | 0.5 kB |
-| Brand logo (only the selected company's is downloaded) | 3 to 13 kB each | WebP, already compressed |
-| Page weight Lighthouse measured | 103 KiB total | |
+| JavaScript (main) | 268 kB | 82.9 kB |
+| CSS | 21.2 kB | 5.2 kB |
+| Demo controls (loaded only with `?demo=1`) | 1.3 kB | 0.6 kB |
+| Font (Plus Jakarta Sans, Latin, all weights) | 27.3 kB | already compressed (woff2) |
+| Brand logo (only the selected company's is downloaded) | 3.5 to 12.6 kB each | SVG, PNG or WebP |
+| Page weight Lighthouse measured | 132 KiB total | |
 
 Sizes are as reported by Vite (1 kB = 1,000 bytes). Brotli, which most hosts use, is about 15% smaller than gzip.
 
@@ -18,48 +35,50 @@ Measured by mapping the minified bundle back to source files (`yarn build --sour
 
 | Part | Minified size | Share |
 |---|---|---|
-| react-dom | 207 kB | 85% |
-| React and its scheduler | 12 kB | 5% |
-| Our own code | 26 kB | 11% |
+| react-dom | 207 kB | 77% |
+| React and its scheduler | 12 kB | 4% |
+| Our own code | 49 kB | 18% |
 
-So nearly all of the weight is React itself. Our code is small, and part of it is mock data that a real backend would replace.
+Most of the weight is still React itself. Our code is larger than at the start because the page now has more features (search palette, status strip, shared-device bar), and part of it is mock data that a real backend would replace.
 
 ### What keeps it small
 
-- No UI library, no router, no state library, no date library (`Intl.DateTimeFormat` is built into the browser), and no icon library (icons are small inline SVGs).
-- Tailwind generates only the CSS classes actually used, so the stylesheet is 3.8 kB gzipped.
-- System fonts, so there are no font downloads and no flash of unstyled text.
-- Demo controls are split into their own file and only downloaded when `?demo=1` is present.
-- Logos are the only images. They were resized from up to 4096px wide down to 96px tall (enough for sharp display on high-resolution screens) and converted to WebP, which took the largest from 217 kB to 3 kB. Only the selected company's logo is downloaded.
+- No UI library, no router, no state library, no date library (`Intl.DateTimeFormat` is built into the browser) and no icon library. The icons are the SVG paths of a few Lucide icons (ISC licence) copied into small components.
+- Tailwind generates only the CSS classes actually used.
+- One font file, self-hosted, only the Latin part of the variable font, with `font-display: swap` so text shows at once and swaps when the font arrives. It is preloaded so it starts downloading early.
+- The demo controls are split into their own file and only downloaded when `?demo=1` is present.
+- Logos are the only images. Colour logos were resized and converted to WebP; the white logos are SVGs run through svgo. Only the selected company's logo is downloaded.
 
 ## Lighthouse (mobile, simulated slow 4G, production build served locally)
 
-| | First run | After alerts fix | After real logos and footer |
-|---|---|---|---|
-| Performance | 77 | 100 | **100** |
-| Accessibility | 100 | 100 | 100 |
-| Best practices | 100 | 100 | 100 |
-| Cumulative layout shift | **0.603** | 0.006 | **0** |
-| First contentful paint | 1.4 s | 1.4 s | 1.4 s |
-| Largest contentful paint | 1.4 s | 1.4 s | 1.5 s |
-| Total blocking time | 0 ms | 0 ms | 0 ms |
+| | First build | After alerts gate | After real logos | Final |
+|---|---|---|---|---|
+| Performance | 77 | 100 | 100 | **99** |
+| Accessibility | 100 | 100 | 100 | 100 |
+| Best practices | 100 | 100 | 100 | 100 |
+| Cumulative layout shift | **0.603** | 0.006 | 0 | **0** |
+| Largest contentful paint | 1.4 s | 1.4 s | 1.5 s | 1.8 s |
+| Total blocking time | 0 ms | 0 ms | 0 ms | 0 to 10 ms |
 
-### The layout shift problem, and the fix
+The final column is the median of three runs. Largest contentful paint is slightly slower than at the start because the font is now downloaded instead of using system fonts; I accepted that for a consistent brand look.
 
-The first run scored 0.603 for layout shift, where under 0.1 is good. Cause: the critical alert arrives from the server a moment after the rest of the page is drawn, and it is inserted above everything, pushing the page down. On a real device that means a link can move just as someone taps it, and for this product it is the worst possible moment for the page to jump.
+## Layout shift: three problems, and what fixed them
 
-Fix: alerts settle first. While they load the page shows only "Checking for alerts...". A critical alert then appears before anything else, and nothing below it has been drawn yet, so nothing moves. To stop a slow alerts service blocking the page, the wait is capped at 1.5 seconds (`ALERTS_WAIT_LIMIT_MS`), after which the page shows anyway.
+Layout shift is the page jumping because something appears above something already on screen. For this product it matters most: a link can move just as someone taps it. Each of these was found by measuring, not by looking.
 
-The trade-off: for up to 1.5 seconds staff see a short status line instead of the launcher. I judged that right for a portal whose most important job is delivering critical alerts.
+**1. The critical alert arriving late (0.603).** The alert comes from the server a moment after the rest of the page is drawn and is inserted at the top. Fix: the alerts and the apps are requested together and the page is drawn only once both have settled ("Loading your portal..."). The wait is capped at 1.5 seconds so a slow service cannot hold the page, and it only ever applies to the first load, so a later retry cannot hide an alert that is already on screen. Trade-off: for up to 1.5 seconds staff see a status line instead of the launcher.
+
+**2. The footer (0.142).** After adding the real branding the footer was visible while the page loaded, then pushed down. Fix: the main area reserves a full screen of height (`min-h-dvh`), so the footer starts below the fold.
+
+**3. The company button on a phone (0.218).** Replacing the company dropdown with a button made it only as wide as its text. On a phone the "Online, synced" chip started beside it, then wrapped onto its own row when its real text arrived, making the header 44 px taller and pushing everything down. My desktop check missed it; Lighthouse's phone profile found it. Fix: the button is full width on phones, as the old dropdown was, so the chip always has its own row.
+
+Logo images carry their real `width` and `height` (stored with each company in the config), so the browser reserves their space before they load.
+
+The lesson is to re-measure on the production build with phone emulation after every visual change, not only in a desktop browser.
 
 ## Limits of these numbers
 
-- One Lighthouse run on a local preview server. Results vary a little between runs.
+- Lighthouse runs on a local preview server and varies a little between runs (one run in a series scored 90 where three repeats scored 99). Treat single scores with care.
 - The mock API adds a fixed 400 ms delay. A real network and server will behave differently, so treat these as a baseline.
 - Lab numbers are not field data. In production I would also measure real users.
-
-### A second layout shift, caused by my own footer
-
-After adding the real branding, layout shift rose to 0.142 and performance dropped to 94. The new footer was visible while the page was still loading, then was pushed down as content arrived. Fix: the main area reserves a full screen of height (`min-h-dvh`), so the footer starts below the fold. Layout shift returned to 0. The lesson is to re-measure after every visual change, because shifts come from anything that appears above something already on screen.
-
-Logo images carry their real `width` and `height` attributes (stored with each company in the config), so the browser reserves their space before they load.
+- Layout shift is measured on first load. Switching company, or the shared-device countdown, moves content by design and is not part of that number.

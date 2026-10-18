@@ -130,6 +130,28 @@ describe('Search palette', () => {
     expect(within(dialog).getByRole('status', { name: '' })).toHaveTextContent(/search is unavailable right now/i)
   })
 
+  it('never lets a slow answer to an old query replace the answer to the newer one', async () => {
+    renderPortal()
+    const { user, dialog } = await openPalette()
+    const box = within(dialog).getByRole('searchbox')
+
+    // The first query is slow, so it is still on its way when the second one is typed and answered.
+    configureApi({ delayMs: 600 })
+    await user.type(box, 'booking')
+    await waitFor(() => expect(within(dialog).getByText(/searching apps and news/i)).toBeInTheDocument())
+
+    configureApi({ delayMs: 0 })
+    // Select the word and type over it, so the query changes straight from one word to the next.
+    await user.tripleClick(box)
+    await user.keyboard('payslips')
+    expect(await within(dialog).findByRole('link', { name: /hr self-service/i })).toBeInTheDocument()
+
+    // Wait long enough for the old, slow answer to arrive, then check it was ignored.
+    await new Promise((resolve) => setTimeout(resolve, 800))
+    expect(within(dialog).getByRole('link', { name: /hr self-service/i })).toBeInTheDocument()
+    expect(within(dialog).queryByRole('link', { name: /booking engine/i })).not.toBeInTheDocument()
+  })
+
   it('has no automatically detectable accessibility violations with results showing', async () => {
     const { container } = renderPortal()
     const { dialog } = await searchFor('booking')

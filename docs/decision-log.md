@@ -20,7 +20,7 @@ Three decisions where I had to give something up.
 
 **Options.** Let the page jump. Reserve blank space for the alert. Wait for the alerts, then draw the page.
 
-**Chosen.** Wait, showing "Checking for alerts...", then draw everything at once. The wait is capped at 1.5 seconds so a slow alerts service cannot hold the whole page. Layout shift fell to 0.006.
+**Chosen.** Wait, showing "Loading your portal...", then draw everything at once. The apps load at the same moment as the alerts, so waiting for both costs nothing extra, and the apps would otherwise arrive late and push the page down too. The wait is capped at 1.5 seconds so a slow alerts service cannot hold the whole page, and it only applies to the first load. Layout shift fell from 0.603 to 0.
 
 **Cost.** Up to 1.5 seconds before the launcher appears, even on days with no alerts. The 1.5 seconds is a judgement, not a measured value. I did not reserve blank space because I cannot know the height in advance: there may be no alert, one, or several.
 
@@ -34,6 +34,6 @@ Three decisions where I had to give something up.
 
 **Chosen.** Offline behaviour. The hardest question in the brief is a payment-failure alert reaching staff on phones with poor signal, and saved copies are the part of the answer I could build and demonstrate honestly.
 
-**Cost.** It is the riskiest to finish, and it is not a full offline app. With no service worker, a device that never loaded the page has nothing to show. Saved data on a shared tablet could belong to the previous person.
+**Cost.** It is the riskiest to finish, and it is not a full offline app. With no service worker, a device that never loaded the page has nothing to show. Saved data on a shared tablet could belong to the previous person. The prototype covers this for a device marked as shared (`?device=shared`): it signs the person out after inactivity, with a warning first, and removes the saved copies.
 
 **Would change if** the brief had stressed night shifts (dark mode) or many job types (role-based views). With more time, a service worker comes first.

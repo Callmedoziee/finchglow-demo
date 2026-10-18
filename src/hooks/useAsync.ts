@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
+import { toError } from '../lib/toError'
 
 export type AsyncState<T> =
   | { status: 'loading' }
@@ -21,7 +22,7 @@ export const useAsync = <T>(load: () => Promise<T>): AsyncState<T> & { reload: (
         if (!cancelled) setState({ status: 'success', data })
       })
       .catch((error: unknown) => {
-        if (!cancelled) setState({ status: 'error', error: error instanceof Error ? error : new Error(String(error)) })
+        if (!cancelled) setState({ status: 'error', error: toError(error) })
       })
     return () => {
       cancelled = true

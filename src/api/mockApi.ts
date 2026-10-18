@@ -13,7 +13,9 @@ const behaviour: ApiBehaviour = { delayMs: 400, failureRate: 0 }
 
 /** Tests and the demo toggle use this to slow down or break the fake API. */
 export const configureApi = (next: Partial<ApiBehaviour>): void => {
-  Object.assign(behaviour, next)
+  // Only overwrite what was actually provided; `undefined` must not wipe a value.
+  if (next.delayMs !== undefined) behaviour.delayMs = next.delayMs
+  if (next.failureRate !== undefined) behaviour.failureRate = next.failureRate
 }
 
 export class ApiError extends Error {

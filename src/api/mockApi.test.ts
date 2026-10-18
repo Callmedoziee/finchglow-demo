@@ -9,6 +9,12 @@ describe('mock API', () => {
     expect((await fetchAlerts()).length).toBeGreaterThan(0)
   })
 
+  it('keeps existing settings when a field is left undefined', async () => {
+    configureApi({ delayMs: 0, failureRate: 1 })
+    configureApi({ failureRate: undefined })
+    await expect(fetchAlerts()).rejects.toBeInstanceOf(ApiError)
+  })
+
   it('rejects with an ApiError when it is set to fail', async () => {
     configureApi({ delayMs: 0, failureRate: 1 })
     await expect(fetchAlerts()).rejects.toBeInstanceOf(ApiError)

@@ -1,20 +1,14 @@
-import { act, render, screen, waitFor } from '@testing-library/react'
+import { act, screen, waitFor } from '@testing-library/react'
 import { axe } from 'vitest-axe'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { configureApi } from '@/services/mockApi'
-import { PortalHome } from '@/features/home/PortalHome'
+import { renderPortal } from '@/test/renderPortal'
 import { apps } from '@/configs/apps'
-import { CompanyProvider } from '@/features/company/CompanyProvider'
-import { alerts, currentEmployee } from '@/data/mockData'
+import { alerts } from '@/data/mockData'
 import { CACHE_KEYS, saveToCache } from './offlineCache'
 import { setOnline } from '@/test/network'
 
-const renderHome = () =>
-  render(
-    <CompanyProvider initialCompanyId="ota">
-      <PortalHome employee={currentEmployee} />
-    </CompanyProvider>,
-  )
+const renderHome = () => renderPortal()
 
 beforeEach(() => configureApi({ delayMs: 0, failureRate: 0 }))
 afterEach(() => {

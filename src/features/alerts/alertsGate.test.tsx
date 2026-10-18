@@ -1,16 +1,9 @@
-import { render, screen } from '@testing-library/react'
+import { screen } from '@testing-library/react'
 import { afterEach, describe, expect, it } from 'vitest'
 import { configureApi } from '@/services/mockApi'
-import { PortalHome } from './PortalHome'
-import { CompanyProvider } from '@/features/company/CompanyProvider'
-import { currentEmployee } from '@/data/mockData'
+import { renderPortal } from '@/test/renderPortal'
 
-const renderHome = () =>
-  render(
-    <CompanyProvider initialCompanyId="ota">
-      <PortalHome employee={currentEmployee} />
-    </CompanyProvider>,
-  )
+const renderHome = () => renderPortal()
 
 afterEach(() => configureApi({ delayMs: 400, failureRate: 0 }))
 

@@ -1,5 +1,6 @@
 import { CompanyLogo } from '@/components/ui/CompanyLogo'
 import { CompanySwitcher } from '@/features/company/CompanySwitcher'
+import { SyncStatus } from '@/features/offline/SyncStatus'
 import { useCompany } from '@/features/company/companyContext'
 
 export const Header = () => {
@@ -14,7 +15,10 @@ export const Header = () => {
           </span>
           <p className="hidden border-l border-line pl-4 text-sm text-muted sm:block">{company.tagline}</p>
         </div>
-        <CompanySwitcher />
+        <div className="flex flex-wrap items-center gap-3">
+          <CompanySwitcher />
+          <SyncStatus />
+        </div>
       </div>
     </header>
   )

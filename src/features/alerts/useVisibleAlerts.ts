@@ -14,6 +14,8 @@ export type VisibleAlerts =
       other: Alert[]
       /** Set when these are saved copies because a refresh failed. Null means they are fresh. */
       savedAt: string | null
+      /** When these alerts were last known to be correct: now if fresh, the save time if they are a saved copy. */
+      syncedAt: string
       /** True while a retry is running and the saved copy is still on screen. */
       isRefreshing: boolean
       reload: () => void
@@ -33,6 +35,7 @@ export const useVisibleAlerts = (): VisibleAlerts => {
     critical: sorted.filter((alert) => alert.severity === 'critical'),
     other: sorted.filter((alert) => alert.severity !== 'critical'),
     savedAt: request.savedAt,
+    syncedAt: request.status === 'success' ? request.loadedAt : request.savedAt,
     isRefreshing: request.status === 'stale' && request.isRefreshing,
     reload: request.reload,
   }

@@ -34,6 +34,12 @@
   --color-line: #8a94a3;
   /* Hairlines around cards and between list items. Decorative only, so lighter. */
   --color-border: #e2e8f0;
+
+  /* Status chips. Each text colour reaches 4.5:1 on its soft background. */
+  --color-success: #067647;
+  --color-success-soft: #ecfdf3;
+  --color-warning: #93370d;
+  --color-warning-soft: #fff6e5;
 }
 
 body {

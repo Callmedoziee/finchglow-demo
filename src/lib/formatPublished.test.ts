@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { formatPublished } from './formatPublished'
+import { formatPublished, formatTimeOfDay } from './formatPublished'
 
 describe('formatPublished', () => {
   it('formats an ISO timestamp as date and time', () => {
@@ -8,5 +8,10 @@ describe('formatPublished', () => {
 
   it('shows the same moment in another time zone', () => {
     expect(formatPublished('2026-10-17T08:05:00Z', 'Africa/Lagos')).toBe('17 Oct 2026, 09:05')
+  })
+
+  it('formats just the time of day', () => {
+    expect(formatTimeOfDay('2026-10-17T08:05:00Z', 'UTC')).toBe('08:05')
+    expect(formatTimeOfDay('2026-10-17T08:05:00Z', 'Africa/Lagos')).toBe('09:05')
   })
 })

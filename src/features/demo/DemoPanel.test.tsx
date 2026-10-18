@@ -1,20 +1,12 @@
-import { render, screen, waitFor } from '@testing-library/react'
+import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { axe } from 'vitest-axe'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { configureApi } from '@/services/mockApi'
+import { renderPortal } from '@/test/renderPortal'
 import { DemoPanel } from './DemoPanel'
-import { PortalHome } from '@/features/home/PortalHome'
-import { CompanyProvider } from '@/features/company/CompanyProvider'
-import { currentEmployee } from '@/data/mockData'
 
-const renderDemo = () =>
-  render(
-    <CompanyProvider initialCompanyId="ota">
-      <PortalHome employee={currentEmployee} />
-      <DemoPanel />
-    </CompanyProvider>,
-  )
+const renderDemo = () => renderPortal({ extra: <DemoPanel /> })
 
 beforeEach(() => configureApi({ delayMs: 0, failureRate: 0 }))
 afterEach(() => configureApi({ delayMs: 400, failureRate: 0 }))

@@ -6,8 +6,8 @@ import { REFRESH_EVENT } from './refreshEvent'
 export type CachedState<T> =
   | { status: 'loading' }
   | { status: 'error'; error: Error }
-  /** Fresh data from the server. */
-  | { status: 'success'; data: T; savedAt: null }
+  /** Fresh data from the server. `loadedAt` is when it arrived. */
+  | { status: 'success'; data: T; savedAt: null; loadedAt: string }
   /**
    * The last copy we saved, shown because a refresh failed or a retry is still running.
    * `savedAt` says how old it is. While `isRefreshing`, a retry is in flight.
@@ -44,7 +44,9 @@ export const useCachedAsync = <T>(cacheKey: string, loadData: () => Promise<T>):
     return () => window.removeEventListener('online', reload)
   }, [needsRefresh, reload])
 
-  if (request.status === 'success') return { status: 'success', data: request.data, savedAt: null, reload }
+  if (request.status === 'success') {
+    return { status: 'success', data: request.data, savedAt: null, loadedAt: request.loadedAt, reload }
+  }
 
   // During a retry, keep showing the saved copy instead of blanking the page while we wait.
   if (request.status === 'loading') {

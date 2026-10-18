@@ -1,20 +1,11 @@
-import { render, screen } from '@testing-library/react'
+import { screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { axe } from 'vitest-axe'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { configureApi } from '@/services/mockApi'
-import { CompanySwitcher } from '@/features/company/CompanySwitcher'
-import { PortalHome } from '@/features/home/PortalHome'
-import { CompanyProvider } from '@/features/company/CompanyProvider'
-import { currentEmployee } from '@/data/mockData'
+import { renderPortal } from '@/test/renderPortal'
 
-const renderHome = () =>
-  render(
-    <CompanyProvider initialCompanyId="ota">
-      <CompanySwitcher />
-      <PortalHome employee={currentEmployee} />
-    </CompanyProvider>,
-  )
+const renderHome = () => renderPortal()
 
 const searchFor = async (text: string) => {
   const user = userEvent.setup()

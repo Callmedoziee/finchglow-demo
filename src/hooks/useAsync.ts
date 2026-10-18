@@ -3,7 +3,8 @@ import { toError } from '@/lib/toError'
 
 export type AsyncState<T> =
   | { status: 'loading' }
-  | { status: 'success'; data: T }
+  /** `loadedAt` is an ISO timestamp of when the data arrived. */
+  | { status: 'success'; data: T; loadedAt: string }
   | { status: 'error'; error: Error }
 
 /**
@@ -20,7 +21,7 @@ export const useAsync = <T>(
     let cancelled = false
     loadData()
       .then((data) => {
-        if (!cancelled) setAsyncState({ status: 'success', data })
+        if (!cancelled) setAsyncState({ status: 'success', data, loadedAt: new Date().toISOString() })
       })
       .catch((error: unknown) => {
         if (!cancelled) setAsyncState({ status: 'error', error: toError(error) })

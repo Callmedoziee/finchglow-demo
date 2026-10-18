@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it } from 'vitest'
 import { Header } from '@/components/layouts/Header'
+import { AlertsProvider } from '@/features/alerts/AlertsProvider'
 import { companies } from '@/configs/companies'
 import { contrastRatio } from '@/theme/contrast'
 import type { Company } from '@/types/portal'
@@ -30,7 +31,9 @@ describe('Adding a seventh company by configuration only', () => {
     const user = userEvent.setup()
     render(
       <CompanyProvider initialCompanyId="ota">
-        <Header />
+        <AlertsProvider>
+          <Header />
+        </AlertsProvider>
       </CompanyProvider>,
     )
 

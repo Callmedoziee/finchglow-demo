@@ -1,16 +1,18 @@
 import { fetchApps } from '@/api/mockApi'
 import { AppTile } from '@/components/AppTile'
 import { ErrorMessage, LoadingMessage } from '@/components/feedback'
+import { StaleNotice } from '@/components/StaleNotice'
 import { useCompany } from '@/context/companyContext'
-import { useAsync } from '@/hooks/useAsync'
+import { useCachedAsync } from '@/hooks/useCachedAsync'
 import { groupApps } from '@/lib/groupApps'
+import { CACHE_KEYS } from '@/lib/offlineCache'
 import { filterForCompany } from '@/lib/visibility'
 import type { PortalApp } from '@/types/portal'
 
 /** The launcher grid: the apps the selected company can open, grouped by category. */
 export const LauncherSection = () => {
   const { company } = useCompany()
-  const appsRequest = useAsync(fetchApps)
+  const appsRequest = useCachedAsync(CACHE_KEYS.apps, fetchApps)
 
   return (
     <section aria-labelledby="launcher-heading">
@@ -26,7 +28,20 @@ export const LauncherSection = () => {
         </div>
       )}
 
-      {appsRequest.status === 'success' && <AppGroups apps={filterForCompany(appsRequest.data, company.id)} companyName={company.name} />}
+      {appsRequest.status === 'stale' && (
+        <div className="mt-3">
+          <StaleNotice
+            what="apps"
+            savedAt={appsRequest.savedAt}
+            isRefreshing={appsRequest.isRefreshing}
+            onRetry={appsRequest.reload}
+          />
+        </div>
+      )}
+
+      {(appsRequest.status === 'success' || appsRequest.status === 'stale') && (
+        <AppGroups apps={filterForCompany(appsRequest.data, company.id)} companyName={company.name} />
+      )}
     </section>
   )
 }

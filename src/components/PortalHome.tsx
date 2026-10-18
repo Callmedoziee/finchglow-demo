@@ -5,8 +5,10 @@ import { ErrorMessage } from '@/components/feedback'
 import { Greeting } from '@/components/Greeting'
 import { LauncherSection } from '@/components/LauncherSection'
 import { NewsFeed } from '@/components/NewsFeed'
+import { OfflineBanner } from '@/components/OfflineBanner'
 import { SearchBar } from '@/components/SearchBar'
 import { SearchResultsSection } from '@/components/SearchResultsSection'
+import { StaleNotice } from '@/components/StaleNotice'
 import { useCompany } from '@/context/companyContext'
 import type { Employee } from '@/data/mockData'
 import { useDebouncedValue } from '@/hooks/useDebouncedValue'
@@ -25,9 +27,16 @@ export const PortalHome = ({ employee }: { employee: Employee }) => {
 
   return (
     <div className="flex flex-col gap-8">
+      <OfflineBanner />
+
       {alerts.status === 'error' && (
         // If alerts cannot load, say so loudly: staff must not assume "no alerts" means "all clear".
         <ErrorMessage message={`Alerts could not be loaded. ${alerts.error.message}`} onRetry={alerts.reload} />
+      )}
+
+      {alerts.status === 'success' && alerts.savedAt !== null && (
+        // Old alerts must say they are old: a critical alert may already have been resolved, or a new one missed.
+        <StaleNotice what="alerts" savedAt={alerts.savedAt} isRefreshing={alerts.isRefreshing} onRetry={alerts.reload} />
       )}
 
       {alerts.status === 'success' && alerts.critical.length > 0 && (

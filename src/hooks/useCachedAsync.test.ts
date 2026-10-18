@@ -1,4 +1,4 @@
-import { renderHook, waitFor } from '@testing-library/react'
+import { act, renderHook, waitFor } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 import { loadFromCache, saveToCache } from '@/lib/offlineCache'
 import { setOnline } from '@/test/network'
@@ -41,5 +41,22 @@ describe('useCachedAsync', () => {
 
     await waitFor(() => expect(result.current.status).toBe('success'))
     expect(result.current).toMatchObject({ data: ['fresh'] })
+  })
+
+  it('keeps showing the saved copy while a retry is still running', async () => {
+    saveToCache('alerts', ['saved'])
+    let finishRetry: (value: string[]) => void = () => {}
+    const load = vi
+      .fn()
+      .mockRejectedValueOnce(new Error('offline'))
+      .mockReturnValueOnce(new Promise<string[]>((resolve) => (finishRetry = resolve)))
+    const { result } = renderHook(() => useCachedAsync('alerts', load))
+    await waitFor(() => expect(result.current).toMatchObject({ status: 'stale', isRefreshing: false }))
+
+    act(() => result.current.reload())
+    expect(result.current).toMatchObject({ status: 'stale', data: ['saved'], isRefreshing: true })
+
+    act(() => finishRetry(['fresh']))
+    await waitFor(() => expect(result.current).toMatchObject({ status: 'success', data: ['fresh'] }))
   })
 })

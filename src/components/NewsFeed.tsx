@@ -1,13 +1,15 @@
 import { fetchNews } from '@/api/mockApi'
 import { ErrorMessage, LoadingMessage } from '@/components/feedback'
 import { NewsCard } from '@/components/NewsCard'
+import { StaleNotice } from '@/components/StaleNotice'
 import { useCompany } from '@/context/companyContext'
-import { useAsync } from '@/hooks/useAsync'
+import { useCachedAsync } from '@/hooks/useCachedAsync'
+import { CACHE_KEYS } from '@/lib/offlineCache'
 import { filterForCompany } from '@/lib/visibility'
 
 export const NewsFeed = () => {
   const { company } = useCompany()
-  const newsRequest = useAsync(fetchNews)
+  const newsRequest = useCachedAsync(CACHE_KEYS.news, fetchNews)
 
   return (
     <section aria-labelledby="news-heading">
@@ -23,7 +25,18 @@ export const NewsFeed = () => {
         </div>
       )}
 
-      {newsRequest.status === 'success' && (
+      {newsRequest.status === 'stale' && (
+        <div className="mt-3">
+          <StaleNotice
+            what="news"
+            savedAt={newsRequest.savedAt}
+            isRefreshing={newsRequest.isRefreshing}
+            onRetry={newsRequest.reload}
+          />
+        </div>
+      )}
+
+      {(newsRequest.status === 'success' || newsRequest.status === 'stale') && (
         <ul className="mt-3 flex flex-col gap-3">
           {filterForCompany(newsRequest.data, company.id)
             .sort((first, second) => second.publishedAt.localeCompare(first.publishedAt))

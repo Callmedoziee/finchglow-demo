@@ -7,8 +7,11 @@ export type CachedState<T> =
   | { status: 'error'; error: Error }
   /** Fresh data from the server. */
   | { status: 'success'; data: T; savedAt: null }
-  /** The refresh failed, so this is the last copy we saved. `savedAt` says how old it is. */
-  | { status: 'stale'; data: T; savedAt: string; error: Error }
+  /**
+   * The last copy we saved, shown because a refresh failed or a retry is still running.
+   * `savedAt` says how old it is. While `isRefreshing`, a retry is in flight.
+   */
+  | { status: 'stale'; data: T; savedAt: string; isRefreshing: boolean }
 
 /**
  * Like useAsync, but remembers the last good result on the device.
@@ -35,9 +38,15 @@ export const useCachedAsync = <T>(cacheKey: string, loadData: () => Promise<T>):
   }, [needsRefresh, reload])
 
   if (request.status === 'success') return { status: 'success', data: request.data, savedAt: null, reload }
-  if (request.status === 'loading') return { status: 'loading', reload }
+
+  // During a retry, keep showing the saved copy instead of blanking the page while we wait.
+  if (request.status === 'loading') {
+    const saved = request.isRetry ? loadFromCache<T>(cacheKey) : null
+    if (saved) return { status: 'stale', data: saved.data, savedAt: saved.savedAt, isRefreshing: true, reload }
+    return { status: 'loading', reload }
+  }
 
   const saved = loadFromCache<T>(cacheKey)
-  if (saved) return { status: 'stale', data: saved.data, savedAt: saved.savedAt, error: request.error, reload }
+  if (saved) return { status: 'stale', data: saved.data, savedAt: saved.savedAt, isRefreshing: false, reload }
   return { status: 'error', error: request.error, reload }
 }

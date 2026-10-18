@@ -10,7 +10,9 @@ export type AsyncState<T> =
  * Runs `loadData` on mount and whenever `reload` is called.
  * `loadData` must be a stable function (defined outside the component or memoised).
  */
-export const useAsync = <T>(loadData: () => Promise<T>): AsyncState<T> & { reload: () => void } => {
+export const useAsync = <T>(
+  loadData: () => Promise<T>,
+): AsyncState<T> & { reload: () => void; isRetry: boolean } => {
   const [asyncState, setAsyncState] = useState<AsyncState<T>>({ status: 'loading' })
   const [retryCount, setRetryCount] = useState(0)
 
@@ -33,5 +35,6 @@ export const useAsync = <T>(loadData: () => Promise<T>): AsyncState<T> & { reloa
     setAsyncState({ status: 'loading' })
     setRetryCount((count) => count + 1)
   }, [])
-  return { ...asyncState, reload }
+  // isRetry is true once reload() has been used, so callers can tell a first load from a retry.
+  return { ...asyncState, reload, isRetry: retryCount > 0 }
 }

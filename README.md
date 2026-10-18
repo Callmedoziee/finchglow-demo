@@ -97,7 +97,7 @@ The company then appears in the switcher, gets its own theme, and the existing c
 
 ## The extra feature: offline-friendly behaviour
 
-**Why I chose it.** Staff use the portal on phones and tablets that move between buildings with patchy signal. The brief's hardest scenario is a payment-failure alert reaching people on weak signal. A saved copy of the last alerts is the part of that answer I could build and demonstrate honestly. I compared it with dark mode, role-based views and a component library (see the decision log).
+**Why I chose it.** Staff use the portal on phones and tablets that move between buildings with patchy signal. The brief's hardest scenario is a payment-failure alert reaching people on weak signal. A saved copy of the last alerts is the part of that answer I could build and demonstrate honestly. I compared it with dark mode, role-based views and a component library (see the [decision log](docs/decision-log.md)).
 
 **What it does**
 - Every successful load of alerts, news and apps is saved on the device with a timestamp.

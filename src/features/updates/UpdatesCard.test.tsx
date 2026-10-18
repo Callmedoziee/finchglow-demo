@@ -58,4 +58,19 @@ describe('UpdatesCard', () => {
     expect(await within(card).findByText('Booking platform running slowly')).toBeInTheDocument()
     window.location.hash = ''
   })
+
+  it('switches back to All when a search result points at news the Alerts chip is hiding', async () => {
+    const user = userEvent.setup()
+    renderPortal({ companyId: 'ota' })
+    const card = await findCard()
+    await within(card).findByText('Summer holiday packages open for booking')
+    await user.click(within(card).getByRole('button', { name: /^alerts/i }))
+    expect(within(card).queryByText('Summer holiday packages open for booking')).not.toBeInTheDocument()
+
+    window.location.hash = '#news-n-2'
+    window.dispatchEvent(new HashChangeEvent('hashchange'))
+
+    expect(await within(card).findByText('Summer holiday packages open for booking')).toBeInTheDocument()
+    window.location.hash = ''
+  })
 })

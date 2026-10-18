@@ -25,7 +25,7 @@ const UpdateRow = ({ update }: { update: Update }) => {
 
   return (
     <li
-      id={isAlert ? `alert-${update.alert.id}` : undefined}
+      id={isAlert ? `alert-${update.alert.id}` : `news-${update.item.id}`}
       className="flex scroll-mt-4 gap-3 border-t border-border py-4 first:border-t-0 first:pt-0 last:pb-0"
     >
       <span
@@ -62,11 +62,13 @@ export const UpdatesCard = () => {
   const newsRequest = useCachedAsync(CACHE_KEYS.news, fetchNews)
   const [filter, setFilter] = useState<UpdatesFilter>('all')
 
-  // A "View incident" link points at an alert row. If the News chip is hiding it, show everything and scroll again.
+  // A "View incident" link or a search result points at one row. If the chip in use is hiding it, show everything and scroll again.
   useEffect(() => {
     const showLinkedAlert = () => {
-      if (!window.location.hash.startsWith('#alert-')) return
-      setFilter((current) => (current === 'news' ? 'all' : current))
+      const { hash } = window.location
+      const needed: UpdatesFilter | null = hash.startsWith('#alert-') ? 'alerts' : hash.startsWith('#news-') ? 'news' : null
+      if (needed === null) return
+      setFilter((current) => (current === 'all' || current === needed ? current : 'all'))
       requestAnimationFrame(() => document.getElementById(window.location.hash.slice(1))?.scrollIntoView())
     }
     window.addEventListener('hashchange', showLinkedAlert)

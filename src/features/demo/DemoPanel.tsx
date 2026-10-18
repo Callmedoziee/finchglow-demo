@@ -24,6 +24,7 @@ export const DemoPanel = () => {
 
   const isFailing = behaviour.failureRate === 1
   const isSlow = behaviour.delayMs > NORMAL_DELAY_MS
+  const isNewsSearchBroken = behaviour.failingEndpoints.includes('searchNews')
 
   return (
     <aside
@@ -47,6 +48,14 @@ export const DemoPanel = () => {
           className={buttonClass(isSlow)}
         >
           Slow network
+        </button>
+        <button
+          type="button"
+          aria-pressed={isNewsSearchBroken}
+          onClick={() => change({ failingEndpoints: isNewsSearchBroken ? [] : ['searchNews'] })}
+          className={buttonClass(isNewsSearchBroken)}
+        >
+          Break news search
         </button>
         <button type="button" onClick={requestRefresh} className={buttonClass(false)}>
           Refresh now

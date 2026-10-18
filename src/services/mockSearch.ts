@@ -1,11 +1,6 @@
 import { filterForCompany } from '@/lib/visibility'
 import type { CompanyId, NewsItem, PortalApp } from '@/types/portal'
 
-export interface SearchResults {
-  apps: PortalApp[]
-  news: NewsItem[]
-}
-
 /** True when every word in the query appears somewhere in the text (case-insensitive). */
 export const matchesQuery = (text: string, query: string): boolean => {
   const lowerCaseText = text.toLowerCase()
@@ -13,17 +8,14 @@ export const matchesQuery = (text: string, query: string): boolean => {
   return searchWords.every((word) => lowerCaseText.includes(word))
 }
 
-/** Searches apps and news the given company is allowed to see. A blank query matches nothing. */
-export const searchPortal = (
-  query: string,
-  companyId: CompanyId,
-  allApps: PortalApp[],
-  allNews: NewsItem[],
-): SearchResults => {
-  if (query.trim() === '') return { apps: [], news: [] }
+/** Apps the given company may see that match the query. A blank query matches nothing. */
+export const searchApps = (query: string, companyId: CompanyId, allApps: PortalApp[]): PortalApp[] =>
+  query.trim() === ''
+    ? []
+    : filterForCompany(allApps, companyId).filter((app) => matchesQuery(`${app.name} ${app.description}`, query))
 
-  return {
-    apps: filterForCompany(allApps, companyId).filter((app) => matchesQuery(`${app.name} ${app.description}`, query)),
-    news: filterForCompany(allNews, companyId).filter((item) => matchesQuery(`${item.title} ${item.summary}`, query)),
-  }
-}
+/** News the given company may see that matches the query. A blank query matches nothing. */
+export const searchNews = (query: string, companyId: CompanyId, allNews: NewsItem[]): NewsItem[] =>
+  query.trim() === ''
+    ? []
+    : filterForCompany(allNews, companyId).filter((item) => matchesQuery(`${item.title} ${item.summary}`, query))

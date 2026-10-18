@@ -1,4 +1,14 @@
-import type { PortalApp } from '@/types/portal'
+import type { AppCategory, PortalApp } from '@/types/portal'
+
+/** The order categories appear in, and the heading shown for each. */
+export const categoryOrder: { id: AppCategory; label: string }[] = [
+  { id: 'booking', label: 'Booking' },
+  { id: 'sales', label: 'Sales' },
+  { id: 'operations', label: 'Operations' },
+  { id: 'learning', label: 'Learning' },
+  { id: 'people', label: 'People' },
+  { id: 'finance', label: 'Finance' },
+]
 
 /**
  * The app catalogue. `companies` decides who sees each tile:

@@ -2,6 +2,7 @@ import { fetchEmployee } from '@/api/mockApi'
 import { ErrorMessage, LoadingMessage } from '@/components/feedback'
 import { Greeting } from '@/components/Greeting'
 import { Header } from '@/components/Header'
+import { LauncherSection } from '@/components/LauncherSection'
 import { CompanyProvider } from '@/context/CompanyProvider'
 import { useAsync } from '@/hooks/useAsync'
 
@@ -42,6 +43,9 @@ const App = () => {
       <Header />
       <main id="main" className="mx-auto max-w-6xl px-4 py-6">
         <Greeting employee={session.data} />
+        <div className="mt-8">
+          <LauncherSection />
+        </div>
       </main>
     </CompanyProvider>
   )

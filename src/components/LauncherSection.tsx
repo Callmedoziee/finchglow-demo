@@ -60,7 +60,7 @@ const AppGroups = ({ apps, companyName }: { apps: PortalApp[]; companyName: stri
           <h3 id={`group-${group.category}`} className="mb-2 text-sm font-semibold uppercase tracking-wide text-muted">
             {group.label}
           </h3>
-          <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             {group.apps.map((app) => (
               <li key={app.id}>
                 <AppTile app={app} />

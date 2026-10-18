@@ -53,7 +53,7 @@ export const alerts: Alert[] = [
 ]
 
 export const news: NewsItem[] = [
-  { id: 'n-1', title: 'Group wins regional travel award', summary: 'Finchglow was named best travel group in the region for the second year running.', publishedAt: '2026-10-14T10:00:00Z', companies: '*' },
+  { id: 'n-1', title: 'Staff recognition week starts Monday', summary: 'Nominate a colleague who went the extra mile for a customer. Nominations close on Friday.', publishedAt: '2026-10-14T10:00:00Z', companies: '*' },
   { id: 'n-2', title: 'Summer holiday packages open for booking', summary: 'The Holidays team has published next summer\'s packages. Sales training starts next week.', publishedAt: '2026-10-13T12:00:00Z', companies: ['holidays', 'ota'] },
   { id: 'n-3', title: 'Academy autumn cohort begins', summary: 'Forty new trainees start the foundations programme on Monday.', publishedAt: '2026-10-12T09:00:00Z', companies: ['academy'] },
   { id: 'n-4', title: 'Corporate client onboarding checklist updated', summary: 'The TMC onboarding steps now include a policy review call in week one.', publishedAt: '2026-10-11T15:30:00Z', companies: ['tmc'] },

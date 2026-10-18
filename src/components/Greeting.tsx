@@ -18,7 +18,7 @@ export const Greeting = ({ employee, now }: Props) => {
   const isPreviewing = company.id !== employeeCompany.id
 
   return (
-    <section aria-labelledby="greeting-heading">
+    <section aria-labelledby="greeting-heading" className="rounded-xl border-l-8 border-accent bg-accent-soft p-5">
       <h1 id="greeting-heading" className="text-2xl font-bold sm:text-3xl">
         {greetingFor(greetingTime.getHours())}, {employee.firstName}
       </h1>

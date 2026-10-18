@@ -24,7 +24,7 @@ describe('searchPortal', () => {
   })
 
   it('finds news by title or summary', () => {
-    expect(searchPortal('award', 'ota', apps, news).news.map((item) => item.title)).toEqual(['Group wins regional travel award'])
+    expect(searchPortal('recognition', 'ota', apps, news).news.map((item) => item.title)).toEqual(['Staff recognition week starts Monday'])
   })
 
   it('only returns what the selected company may see', () => {

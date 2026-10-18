@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { axe } from 'vitest-axe'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { configureApi } from '@/api/mockApi'
+import { getCompany } from '@/config/companies'
 import App from './App'
 
 beforeEach(() => configureApi({ delayMs: 0, failureRate: 0 }))
@@ -14,7 +15,7 @@ describe('App shell', () => {
     expect(screen.getByRole('status')).toHaveTextContent(/loading/i)
 
     expect(await screen.findByRole('heading', { level: 1, name: /amara/i })).toBeInTheDocument()
-    expect(screen.getByText('You work at Finchglow Travel.')).toBeInTheDocument()
+    expect(screen.getByText('You work at Travelden.')).toBeInTheDocument()
   })
 
   it('re-themes and updates the page when another company is selected', async () => {
@@ -22,11 +23,11 @@ describe('App shell', () => {
     render(<App />)
     const switcher = await screen.findByRole('combobox', { name: /company/i })
 
-    await user.selectOptions(switcher, 'Finchglow Academy')
+    await user.selectOptions(switcher, 'academy')
 
-    expect(screen.getByText(/you are viewing finchglow academy/i)).toBeInTheDocument()
+    expect(screen.getByText(/you are viewing lagos aviation academy/i)).toBeInTheDocument()
     await waitFor(() => expect(document.documentElement.dataset.company).toBe('academy'))
-    expect(document.documentElement.style.getPropertyValue('--color-accent')).toBe('#1d4ed8')
+    expect(document.documentElement.style.getPropertyValue('--color-accent')).toBe(getCompany('academy').accent)
   })
 
   it('shows an error with a Retry button when the API fails, and recovers', async () => {

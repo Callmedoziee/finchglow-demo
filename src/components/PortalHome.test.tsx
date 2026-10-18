@@ -40,7 +40,7 @@ describe('PortalHome alerts and news', () => {
     renderHome('ota')
     await screen.findByText('Booking platform running slowly')
 
-    await user.selectOptions(screen.getByRole('combobox', { name: /company/i }), 'Finchglow Corporate')
+    await user.selectOptions(screen.getByRole('combobox', { name: /company/i }), 'tmc')
 
     expect(screen.getByRole('alert', { name: /payment gateway failure/i })).toBeInTheDocument()
     expect(screen.queryByText('Booking platform running slowly')).not.toBeInTheDocument()
@@ -51,7 +51,7 @@ describe('PortalHome alerts and news', () => {
     renderHome('ota')
     expect(await screen.findByText('Summer holiday packages open for booking')).toBeInTheDocument()
 
-    await user.selectOptions(screen.getByRole('combobox', { name: /company/i }), 'Finchglow Academy')
+    await user.selectOptions(screen.getByRole('combobox', { name: /company/i }), 'academy')
 
     expect(screen.getByText('Academy autumn cohort begins')).toBeInTheDocument()
     expect(screen.queryByText('Summer holiday packages open for booking')).not.toBeInTheDocument()

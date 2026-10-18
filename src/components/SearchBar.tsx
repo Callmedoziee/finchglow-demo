@@ -21,8 +21,8 @@ export const SearchBar = ({ value, onChange }: Props) => {
           value={value}
           onChange={(event) => onChange(event.target.value)}
           autoComplete="off"
-          placeholder="For example: booking, payslips, award"
-          className="min-h-11 w-full rounded-lg border border-line bg-surface px-3 text-base text-foreground placeholder:text-muted"
+          placeholder="For example: booking, payslips, recognition"
+          className="min-h-11 w-full rounded-lg border border-line bg-surface px-3 text-base text-foreground placeholder:text-muted [&::-webkit-search-cancel-button]:hidden"
         />
         {value !== '' && (
           <button

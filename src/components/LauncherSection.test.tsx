@@ -31,7 +31,7 @@ describe('LauncherSection', () => {
     renderLauncher('ota')
     await screen.findByRole('link', { name: /booking engine/i })
 
-    await user.selectOptions(screen.getByRole('combobox', { name: /company/i }), 'Finchglow Agents')
+    await user.selectOptions(screen.getByRole('combobox', { name: /company/i }), 'b2b')
 
     expect(screen.getByRole('link', { name: /agent console/i })).toBeInTheDocument()
     expect(screen.queryByRole('link', { name: /booking engine/i })).not.toBeInTheDocument()

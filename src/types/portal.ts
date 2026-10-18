@@ -1,10 +1,19 @@
 export type CompanyId = string
 
+export interface CompanyLogo {
+  /** Path under /public. */
+  src: string
+  /** The image's own size, so the browser can reserve space before it loads (no layout shift). */
+  width: number
+  height: number
+  /** What a screen reader says for the logo. */
+  alt: string
+}
+
 export interface Company {
   id: CompanyId
   name: string
-  /** Two or three letters shown in the logo mark. */
-  mark: string
+  logo: CompanyLogo
   tagline: string
   /** Accent used for buttons, links and focus. Must reach 4.5:1 against `onAccent`. */
   accent: string

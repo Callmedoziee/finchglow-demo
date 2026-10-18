@@ -64,13 +64,15 @@ export const PortalHome = ({ employee }: { employee: Employee }) => {
           {activeQuery !== '' ? (
             <SearchResultsSection key={`${company.id}:${activeQuery}`} query={activeQuery} onClear={() => setQuery('')} />
           ) : (
-            <>
-              <LauncherSection />
-              <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+            <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+              <div className="min-w-0 lg:col-span-2">
+                <LauncherSection />
+              </div>
+              <div className="flex min-w-0 flex-col gap-8">
                 {alerts.status === 'success' && <AlertsFeed alerts={alerts.other} />}
                 <NewsFeed />
               </div>
-            </>
+            </div>
           )}
         </>
       )}

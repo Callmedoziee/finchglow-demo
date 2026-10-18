@@ -8,12 +8,9 @@ export interface SearchResults {
 
 /** True when every word in the query appears somewhere in the text (case-insensitive). */
 export const matchesQuery = (text: string, query: string): boolean => {
-  const haystack = text.toLowerCase()
-  return query
-    .toLowerCase()
-    .split(/\s+/)
-    .filter(Boolean)
-    .every((word) => haystack.includes(word))
+  const lowerCaseText = text.toLowerCase()
+  const searchWords = query.toLowerCase().split(/\s+/).filter(Boolean)
+  return searchWords.every((word) => lowerCaseText.includes(word))
 }
 
 /** Searches apps and news the given company is allowed to see. A blank query matches nothing. */

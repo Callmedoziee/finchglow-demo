@@ -11,8 +11,8 @@ interface Props {
 
 export const Greeting = ({ employee, now = new Date() }: Props) => {
   const { company } = useCompany()
-  const home = getCompany(employee.companyId)
-  const isPreviewing = company.id !== home.id
+  const employeeCompany = getCompany(employee.companyId)
+  const isPreviewing = company.id !== employeeCompany.id
 
   return (
     <section aria-labelledby="greeting-heading">
@@ -20,7 +20,7 @@ export const Greeting = ({ employee, now = new Date() }: Props) => {
         {greetingFor(now.getHours())}, {employee.firstName}
       </h1>
       <p className="mt-1 text-base text-muted">
-        {isPreviewing ? `You are viewing ${company.name}. You work at ${home.name}.` : `You work at ${home.name}.`}
+        {isPreviewing ? `You are viewing ${company.name}. You work at ${employeeCompany.name}.` : `You work at ${employeeCompany.name}.`}
       </p>
     </section>
   )

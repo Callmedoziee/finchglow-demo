@@ -16,14 +16,14 @@ describe('isVisibleTo', () => {
 
 describe('filterForCompany', () => {
   it('always keeps group-wide critical alerts, whichever company is selected', () => {
-    for (const id of ['academy', 'ota', 'b2b', 'tmc', 'holidays', 'facilities']) {
-      const visible = filterForCompany(alerts, id)
-      expect(visible.some((a) => a.severity === 'critical' && a.companies === '*')).toBe(true)
+    for (const companyId of ['academy', 'ota', 'b2b', 'tmc', 'holidays', 'facilities']) {
+      const visible = filterForCompany(alerts, companyId)
+      expect(visible.some((alert) => alert.severity === 'critical' && alert.companies === '*')).toBe(true)
     }
   })
 
   it('hides another company\'s alerts', () => {
-    const titles = filterForCompany(alerts, 'tmc').map((a) => a.title)
+    const titles = filterForCompany(alerts, 'tmc').map((alert) => alert.title)
     expect(titles).not.toContain('Agent login scheduled maintenance')
   })
 })
@@ -31,7 +31,7 @@ describe('filterForCompany', () => {
 describe('sortAlerts', () => {
   it('puts critical first, then warning, then information, newest first within a level', () => {
     const sorted = sortAlerts(alerts)
-    expect(sorted.map((a) => a.severity)).toEqual(['critical', 'warning', 'warning', 'information', 'information'])
+    expect(sorted.map((alert) => alert.severity)).toEqual(['critical', 'warning', 'warning', 'information', 'information'])
     expect(sorted[1].publishedAt > sorted[2].publishedAt).toBe(true)
   })
 

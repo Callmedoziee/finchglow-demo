@@ -9,13 +9,13 @@ export interface ApiBehaviour {
   failureRate: number
 }
 
-const behaviour: ApiBehaviour = { delayMs: 400, failureRate: 0 }
+const apiBehaviour: ApiBehaviour = { delayMs: 400, failureRate: 0 }
 
 /** Tests and the demo toggle use this to slow down or break the fake API. */
-export const configureApi = (next: Partial<ApiBehaviour>): void => {
+export const configureApi = (changes: Partial<ApiBehaviour>): void => {
   // Only overwrite what was actually provided; `undefined` must not wipe a value.
-  if (next.delayMs !== undefined) behaviour.delayMs = next.delayMs
-  if (next.failureRate !== undefined) behaviour.failureRate = next.failureRate
+  if (changes.delayMs !== undefined) apiBehaviour.delayMs = changes.delayMs
+  if (changes.failureRate !== undefined) apiBehaviour.failureRate = changes.failureRate
 }
 
 export class ApiError extends Error {
@@ -25,15 +25,15 @@ export class ApiError extends Error {
   }
 }
 
-const respond = <T>(data: T): Promise<T> =>
+const simulateResponse = <T>(data: T): Promise<T> =>
   new Promise((resolve, reject) => {
     setTimeout(() => {
-      if (Math.random() < behaviour.failureRate) reject(new ApiError())
+      if (Math.random() < apiBehaviour.failureRate) reject(new ApiError())
       else resolve(structuredClone(data))
-    }, behaviour.delayMs)
+    }, apiBehaviour.delayMs)
   })
 
-export const fetchEmployee = (): Promise<Employee> => respond(currentEmployee)
-export const fetchApps = (): Promise<PortalApp[]> => respond(apps)
-export const fetchAlerts = (): Promise<Alert[]> => respond(alerts)
-export const fetchNews = (): Promise<NewsItem[]> => respond(news)
+export const fetchEmployee = (): Promise<Employee> => simulateResponse(currentEmployee)
+export const fetchApps = (): Promise<PortalApp[]> => simulateResponse(apps)
+export const fetchAlerts = (): Promise<Alert[]> => simulateResponse(alerts)
+export const fetchNews = (): Promise<NewsItem[]> => simulateResponse(news)

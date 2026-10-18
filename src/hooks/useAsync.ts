@@ -7,28 +7,28 @@ export type AsyncState<T> =
   | { status: 'error'; error: Error }
 
 /**
- * Runs `load` on mount and whenever `reload` is called.
- * `load` must be a stable function (defined outside the component or memoised).
+ * Runs `loadData` on mount and whenever `reload` is called.
+ * `loadData` must be a stable function (defined outside the component or memoised).
  */
-export const useAsync = <T>(load: () => Promise<T>): AsyncState<T> & { reload: () => void } => {
-  const [state, setState] = useState<AsyncState<T>>({ status: 'loading' })
-  const [attempt, setAttempt] = useState(0)
+export const useAsync = <T>(loadData: () => Promise<T>): AsyncState<T> & { reload: () => void } => {
+  const [asyncState, setAsyncState] = useState<AsyncState<T>>({ status: 'loading' })
+  const [retryCount, setRetryCount] = useState(0)
 
   useEffect(() => {
     let cancelled = false
-    setState({ status: 'loading' })
-    load()
+    setAsyncState({ status: 'loading' })
+    loadData()
       .then((data) => {
-        if (!cancelled) setState({ status: 'success', data })
+        if (!cancelled) setAsyncState({ status: 'success', data })
       })
       .catch((error: unknown) => {
-        if (!cancelled) setState({ status: 'error', error: toError(error) })
+        if (!cancelled) setAsyncState({ status: 'error', error: toError(error) })
       })
     return () => {
       cancelled = true
     }
-  }, [load, attempt])
+  }, [loadData, retryCount])
 
-  const reload = useCallback(() => setAttempt((n) => n + 1), [])
-  return { ...state, reload }
+  const reload = useCallback(() => setRetryCount((count) => count + 1), [])
+  return { ...asyncState, reload }
 }

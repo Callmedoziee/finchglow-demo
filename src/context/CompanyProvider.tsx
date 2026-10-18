@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import { getCompany } from '../config/companies'
 import { applyTheme } from '../theme/applyTheme'
 import type { CompanyId } from '../types/portal'
-import { CompanyContext } from './companyContext'
+import { CompanyContext, type CompanyContextValue } from './companyContext'
 
 interface Props {
   initialCompanyId: CompanyId
@@ -18,6 +18,6 @@ export const CompanyProvider = ({ initialCompanyId, children }: Props) => {
     applyTheme(company)
   }, [company])
 
-  const value = useMemo(() => ({ company, setCompanyId }), [company])
-  return <CompanyContext.Provider value={value}>{children}</CompanyContext.Provider>
+  const contextValue: CompanyContextValue = useMemo(() => ({ company, setCompanyId }), [company])
+  return <CompanyContext.Provider value={contextValue}>{children}</CompanyContext.Provider>
 }

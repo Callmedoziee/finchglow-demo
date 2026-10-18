@@ -15,4 +15,4 @@ export const companies: Company[] = [
 
 export const defaultCompanyId = companies[0].id
 
-export const getCompany = (id: string): Company => companies.find((c) => c.id === id) ?? companies[0]
+export const getCompany = (id: string): Company => companies.find((company) => company.id === id) ?? companies[0]

@@ -10,7 +10,8 @@ export const filterForCompany = <T extends Targeted>(items: T[], companyId: Comp
 const severityRank: Record<Severity, number> = { critical: 0, warning: 1, information: 2 }
 
 /** Critical first, then warnings, then information; newest first within a level. */
-export const sortAlerts = (list: Alert[]): Alert[] =>
-  [...list].sort(
-    (a, b) => severityRank[a.severity] - severityRank[b.severity] || b.publishedAt.localeCompare(a.publishedAt),
+export const sortAlerts = (alertList: Alert[]): Alert[] =>
+  [...alertList].sort(
+    (first, second) =>
+      severityRank[first.severity] - severityRank[second.severity] || second.publishedAt.localeCompare(first.publishedAt),
   )

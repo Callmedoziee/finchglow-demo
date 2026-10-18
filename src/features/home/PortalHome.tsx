@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { ServiceStatus } from '@/features/alerts/ServiceStatus'
 import { AlertsFeed } from '@/features/alerts/AlertsFeed'
 import { useAlerts } from '@/features/alerts/alertsContext'
 import { Greeting } from './Greeting'
@@ -29,6 +30,8 @@ export const PortalHome = ({ employee }: { employee: Employee }) => {
       {activeQuery !== '' ? (
         <SearchResultsSection key={`${company.id}:${activeQuery}`} query={activeQuery} onClear={() => setQuery('')} />
       ) : (
+        <>
+        <ServiceStatus />
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
           <div className="min-w-0 lg:col-span-2">
             <LauncherSection />
@@ -38,6 +41,7 @@ export const PortalHome = ({ employee }: { employee: Employee }) => {
             <NewsFeed />
           </div>
         </div>
+        </>
       )}
     </div>
   )

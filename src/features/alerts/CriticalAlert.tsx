@@ -15,10 +15,11 @@ export const CriticalAlert = ({ alert }: { alert: Alert }) => {
 
   return (
     <section
+      id={`alert-${alert.id}`}
       role="alert"
       aria-labelledby={titleId}
       style={{ backgroundColor: style.background, color: style.foreground }}
-      className="border-y border-black/10"
+      className="scroll-mt-4 border-y border-black/10"
     >
       <div className="mx-auto flex max-w-6xl items-start gap-4 px-4 py-4">
         <span aria-hidden="true" className="grid size-11 shrink-0 place-items-center rounded-full bg-black/20">

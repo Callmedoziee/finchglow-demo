@@ -8,8 +8,9 @@ const AlertItem = ({ alert }: { alert: Alert }) => {
 
   return (
     <li
+      id={`alert-${alert.id}`}
       style={{ backgroundColor: style.background, color: style.foreground, borderColor: style.border }}
-      className="wrap-anywhere rounded-lg border-l-8 border-y border-r p-4"
+      className="wrap-anywhere scroll-mt-4 rounded-lg border-l-8 border-y border-r p-4"
     >
       <p className="flex items-center gap-2 text-sm font-bold uppercase tracking-wide">
         <SeverityIcon severity={alert.severity} className="size-5 shrink-0" />

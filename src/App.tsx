@@ -1,15 +1,15 @@
 import { lazy, Suspense } from 'react'
-import { fetchEmployee } from '@/api/mockApi'
-import { ErrorMessage, LoadingMessage } from '@/components/feedback'
-import { Footer } from '@/components/Footer'
-import { Header } from '@/components/Header'
-import { PortalHome } from '@/components/PortalHome'
-import { CompanyProvider } from '@/context/CompanyProvider'
+import { fetchEmployee } from '@/services/mockApi'
+import { ErrorMessage, LoadingMessage } from '@/components/ui/feedback'
+import { Footer } from '@/components/layouts/Footer'
+import { Header } from '@/components/layouts/Header'
+import { PortalHome } from '@/features/home/PortalHome'
+import { CompanyProvider } from '@/features/company/CompanyProvider'
 import { useAsync } from '@/hooks/useAsync'
-import { isDemoMode } from '@/lib/demoMode'
+import { isDemoMode } from '@/features/demo/demoMode'
 
 // Loaded on demand: normal users never download the demo controls.
-const DemoPanel = lazy(() => import('@/components/DemoPanel').then((module) => ({ default: module.DemoPanel })))
+const DemoPanel = lazy(() => import('@/features/demo/DemoPanel').then((module) => ({ default: module.DemoPanel })))
 
 const SkipLink = () => (
   <a

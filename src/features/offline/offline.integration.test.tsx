@@ -1,0 +1,80 @@
+import { act, render, screen, waitFor } from '@testing-library/react'
+import { axe } from 'vitest-axe'
+import { afterEach, beforeEach, describe, expect, it } from 'vitest'
+import { configureApi } from '@/services/mockApi'
+import { PortalHome } from '@/features/home/PortalHome'
+import { apps } from '@/configs/apps'
+import { CompanyProvider } from '@/features/company/CompanyProvider'
+import { alerts, currentEmployee } from '@/data/mockData'
+import { CACHE_KEYS, saveToCache } from './offlineCache'
+import { setOnline } from '@/test/network'
+
+const renderHome = () =>
+  render(
+    <CompanyProvider initialCompanyId="ota">
+      <PortalHome employee={currentEmployee} />
+    </CompanyProvider>,
+  )
+
+beforeEach(() => configureApi({ delayMs: 0, failureRate: 0 }))
+afterEach(() => {
+  configureApi({ delayMs: 400, failureRate: 0 })
+  setOnline(true)
+})
+
+describe('Offline behaviour', () => {
+  it('still shows the saved critical alert, labelled as saved, when the refresh fails', async () => {
+    saveToCache(CACHE_KEYS.alerts, alerts)
+    configureApi({ failureRate: 1 })
+    renderHome()
+
+    expect(await screen.findByRole('alert', { name: /payment gateway failure/i })).toBeInTheDocument()
+    expect(screen.getByText(/showing saved alerts from/i)).toBeInTheDocument()
+    expect(screen.queryByText(/alerts could not be loaded/i)).not.toBeInTheDocument()
+  })
+
+  it('shows the saved launcher apps when they cannot be refreshed', async () => {
+    saveToCache(CACHE_KEYS.apps, apps)
+    configureApi({ failureRate: 1 })
+    renderHome()
+
+    expect(await screen.findByText(/showing saved apps from/i)).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /booking engine/i })).toBeInTheDocument()
+  })
+
+  it('shows a clear offline banner when the device goes offline and removes it when back online', async () => {
+    renderHome()
+    await screen.findByRole('alert', { name: /payment gateway failure/i })
+    expect(screen.queryByText('You are offline')).not.toBeInTheDocument()
+
+    act(() => setOnline(false))
+    expect(await screen.findByText('You are offline')).toBeInTheDocument()
+
+    act(() => setOnline(true))
+    await waitFor(() => expect(screen.queryByText('You are offline')).not.toBeInTheDocument())
+  })
+
+  it('refreshes by itself when the connection returns, replacing the saved copy with fresh alerts', async () => {
+    saveToCache(CACHE_KEYS.alerts, alerts)
+    configureApi({ failureRate: 1 })
+    renderHome()
+    await screen.findByText(/showing saved alerts from/i)
+
+    configureApi({ failureRate: 0 })
+    act(() => setOnline(true))
+
+    await waitFor(() => expect(screen.queryByText(/showing saved alerts from/i)).not.toBeInTheDocument())
+    expect(screen.getByRole('alert', { name: /payment gateway failure/i })).toBeInTheDocument()
+  })
+
+  it('has no automatically detectable accessibility violations while offline with saved data', async () => {
+    saveToCache(CACHE_KEYS.alerts, alerts)
+    configureApi({ failureRate: 1 })
+    const { container } = renderHome()
+    await screen.findByText(/showing saved alerts from/i)
+    act(() => setOnline(false))
+    await screen.findByText('You are offline')
+
+    expect(await axe(container)).toHaveNoViolations()
+  })
+})

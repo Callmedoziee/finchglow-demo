@@ -1,19 +1,29 @@
 @import 'tailwindcss';
 
-:root {
+/*
+ * Design tokens. Tailwind turns each --color-* into utilities (bg-accent, text-muted...).
+ * The three accent tokens are overwritten at runtime by applyTheme() for the selected company.
+ */
+@theme {
   --color-accent: #1d4ed8;
   --color-on-accent: #ffffff;
   --color-accent-soft: #eff4ff;
-  --color-bg: #f7f8fa;
+  --color-canvas: #f7f8fa;
   --color-surface: #ffffff;
-  --color-text: #111827;
-  --color-text-muted: #4b5563;
-  --color-border: #d1d5db;
+  --color-foreground: #111827;
+  --color-muted: #4b5563;
+  --color-line: #8a94a3;
 }
 
 body {
   margin: 0;
-  background: var(--color-bg);
-  color: var(--color-text);
+  background: var(--color-canvas);
+  color: var(--color-foreground);
   font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* One clear keyboard focus style for the whole app (WCAG 2.4.7). */
+:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
 }

@@ -55,7 +55,7 @@ export const PortalHome = ({ employee }: { employee: Employee }) => {
       ) : (
         <>
           <LauncherSection />
-          <div className="grid gap-8 lg:grid-cols-2">
+          <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
             {alerts.status === 'success' && <AlertsFeed alerts={alerts.other} />}
             <NewsFeed />
           </div>

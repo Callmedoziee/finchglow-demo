@@ -9,7 +9,7 @@ const AlertItem = ({ alert }: { alert: Alert }) => {
   return (
     <li
       style={{ backgroundColor: style.background, color: style.foreground, borderColor: style.border }}
-      className="rounded-lg border-l-8 border-y border-r p-4"
+      className="wrap-anywhere rounded-lg border-l-8 border-y border-r p-4"
     >
       <p className="flex items-center gap-2 text-sm font-bold uppercase tracking-wide">
         <SeverityIcon severity={alert.severity} className="size-5 shrink-0" />
@@ -26,7 +26,7 @@ const AlertItem = ({ alert }: { alert: Alert }) => {
 
 /** Warnings and information. Critical alerts are shown separately, above everything else. */
 export const AlertsFeed = ({ alerts }: { alerts: Alert[] }) => (
-  <section aria-labelledby="alerts-heading">
+  <section aria-labelledby="alerts-heading" className="min-w-0">
     <h2 id="alerts-heading" className="text-xl font-semibold">
       Alerts
     </h2>

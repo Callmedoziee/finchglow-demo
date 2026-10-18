@@ -12,7 +12,7 @@ export const NewsFeed = () => {
   const newsRequest = useCachedAsync(CACHE_KEYS.news, fetchNews)
 
   return (
-    <section aria-labelledby="news-heading">
+    <section aria-labelledby="news-heading" className="min-w-0">
       <h2 id="news-heading" className="text-xl font-semibold">
         News
       </h2>

@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { useAsync } from '@/hooks/useAsync'
 import { loadFromCache, saveToCache } from '@/lib/offlineCache'
+import { REFRESH_EVENT } from '@/lib/refreshEvent'
 
 export type CachedState<T> =
   | { status: 'loading' }
@@ -28,6 +29,12 @@ export const useCachedAsync = <T>(cacheKey: string, loadData: () => Promise<T>):
   useEffect(() => {
     if (freshData !== undefined) saveToCache(cacheKey, freshData)
   }, [cacheKey, freshData])
+
+  // Anything can ask every data source to reload (the demo panel's "Refresh now" does).
+  useEffect(() => {
+    window.addEventListener(REFRESH_EVENT, reload)
+    return () => window.removeEventListener(REFRESH_EVENT, reload)
+  }, [reload])
 
   // While we are not showing fresh data, refresh as soon as the device is back online.
   const needsRefresh = request.status !== 'success'

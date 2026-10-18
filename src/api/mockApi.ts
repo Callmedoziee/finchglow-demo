@@ -12,6 +12,8 @@ export interface ApiBehaviour {
 
 const apiBehaviour: ApiBehaviour = { delayMs: 400, failureRate: 0 }
 
+export const getApiBehaviour = (): ApiBehaviour => ({ ...apiBehaviour })
+
 /** Tests and the demo toggle use this to slow down or break the fake API. */
 export const configureApi = (changes: Partial<ApiBehaviour>): void => {
   // Only overwrite what was actually provided; `undefined` must not wipe a value.

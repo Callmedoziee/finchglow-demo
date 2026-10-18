@@ -1,9 +1,14 @@
+import { lazy, Suspense } from 'react'
 import { fetchEmployee } from '@/api/mockApi'
 import { ErrorMessage, LoadingMessage } from '@/components/feedback'
 import { Header } from '@/components/Header'
 import { PortalHome } from '@/components/PortalHome'
 import { CompanyProvider } from '@/context/CompanyProvider'
 import { useAsync } from '@/hooks/useAsync'
+import { isDemoMode } from '@/lib/demoMode'
+
+// Loaded on demand: normal users never download the demo controls.
+const DemoPanel = lazy(() => import('@/components/DemoPanel').then((module) => ({ default: module.DemoPanel })))
 
 const SkipLink = () => (
   <a
@@ -43,6 +48,11 @@ const App = () => {
       <main id="main" className="mx-auto max-w-6xl px-4 py-6">
         <PortalHome employee={session.data} />
       </main>
+      {isDemoMode() && (
+        <Suspense fallback={null}>
+          <DemoPanel />
+        </Suspense>
+      )}
     </CompanyProvider>
   )
 }

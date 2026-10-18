@@ -9,7 +9,7 @@ This is a front-end prototype. There is no real backend: a small mock API serves
 ```bash
 yarn install
 yarn dev        # http://localhost:5173
-yarn test       # 188 tests
+yarn test       # 192 tests
 yarn lint
 yarn build      # production build into dist/
 yarn preview    # serve the production build
@@ -55,7 +55,7 @@ I developed on Node 24 and use yarn.
 | **Extra: offline-friendly behaviour**, including a shared-device mode that clears saved data | `features/offline`, `features/device` |
 | A seventh subsidiary by configuration, not copied code | `configs/companies.ts` |
 | Error handling and loading states, API sometimes fails | `hooks/useAsync.ts`, `components/ui` |
-| A few meaningful tests | 188 tests, next to the code they test |
+| A few meaningful tests | 192 tests, next to the code they test |
 | Bundle size and how it was kept small | below, and `docs/performance.md` |
 | Sign-in plan, no secrets | below |
 
@@ -112,7 +112,7 @@ The company then appears in the switcher, gets its own theme, and the existing c
 - If a refresh fails, the page shows the saved copy with a notice: "Showing saved alerts from 17 Oct 2026, 09:05. We could not refresh them." A saved critical alert still appears and is clearly labelled as saved.
 - When the browser goes offline, a banner says "You are offline" and explains what the person is seeing.
 - When the connection returns, everything refreshes by itself.
-- During a retry the saved copy stays on screen, so the page never goes blank while waiting.
+- During a retry the saved copy stays on screen, so the page never goes blank while waiting. The last good copy is also kept in memory, so this holds even on a device that cannot save (storage full or blocked, as in some private windows).
 
 **What it does not do.** It is not a full offline-first app. If the page has never loaded on the device, there is nothing to show; that needs a service worker. Both are on the list below.
 
@@ -151,7 +151,7 @@ Not built. The plan:
 
 ## Testing
 
-`yarn test` runs 188 tests with Vitest, Testing Library and axe. They cover:
+`yarn test` runs 192 tests with Vitest, Testing Library and axe. They cover:
 - pure rules: company filtering, alert sorting, search matching, contrast ratios, greeting by hour, merging alerts and news, working out which alerts affect which app;
 - hooks: loading, errors and recovery, an old response never replacing a newer one, debounce, online status, the offline cache and its failure cases, the inactivity timer;
 - whole-screen behaviour: critical alerts announced and kept after switching company, search (including one half failing and a slow old answer arriving late), offline notices, retry and recovery, shared-device sign-out clearing saved data, the demo controls, the error boundary;

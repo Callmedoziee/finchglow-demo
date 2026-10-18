@@ -15,7 +15,7 @@ describe('App shell', () => {
     expect(screen.getByRole('status')).toHaveTextContent(/loading/i)
 
     expect(await screen.findByRole('heading', { level: 1, name: /amara/i })).toBeInTheDocument()
-    expect(screen.getByText('You work at Travelden.')).toBeInTheDocument()
+    expect(screen.getByText(/travel consultant · online sales desk, lagos/i)).toBeInTheDocument()
   })
 
   it('re-themes and updates the page when another company is selected', async () => {

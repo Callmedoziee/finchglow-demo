@@ -1,18 +1,16 @@
-import { fetchApps } from '@/services/mockApi'
 import { AppTile } from './AppTile'
 import { ErrorMessage, LoadingMessage } from '@/components/ui/feedback'
 import { StaleNotice } from '@/features/offline/StaleNotice'
 import { useCompany } from '@/features/company/companyContext'
-import { useCachedAsync } from '@/features/offline/useCachedAsync'
+import { useApps } from './appsContext'
 import { groupApps } from './groupApps'
-import { CACHE_KEYS } from '@/features/offline/offlineCache'
 import { filterForCompany } from '@/lib/visibility'
 import type { PortalApp } from '@/types/portal'
 
 /** The launcher grid: the apps the selected company can open, grouped by category. */
 export const LauncherSection = () => {
   const { company } = useCompany()
-  const appsRequest = useCachedAsync(CACHE_KEYS.apps, fetchApps)
+  const appsRequest = useApps()
 
   return (
     <section aria-labelledby="launcher-heading">

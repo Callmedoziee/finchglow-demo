@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { configureApi } from '@/services/mockApi'
+import { AppsProvider } from './AppsProvider'
 import { LauncherSection } from './LauncherSection'
 import { CompanySwitcher } from '@/features/company/CompanySwitcher'
 import { CompanyProvider } from '@/features/company/CompanyProvider'
@@ -9,8 +10,10 @@ import { CompanyProvider } from '@/features/company/CompanyProvider'
 const renderLauncher = (companyId: string) =>
   render(
     <CompanyProvider initialCompanyId={companyId}>
-      <CompanySwitcher />
-      <LauncherSection />
+      <AppsProvider>
+        <CompanySwitcher />
+        <LauncherSection />
+      </AppsProvider>
     </CompanyProvider>,
   )
 

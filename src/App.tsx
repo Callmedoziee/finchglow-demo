@@ -4,9 +4,10 @@ import { ErrorMessage, LoadingMessage } from '@/components/ui/feedback'
 import { Footer } from '@/components/layouts/Footer'
 import { Header } from '@/components/layouts/Header'
 import { AlertsBar } from '@/features/alerts/AlertsBar'
-import { AlertsGate } from '@/features/alerts/AlertsGate'
 import { AlertsProvider } from '@/features/alerts/AlertsProvider'
+import { PortalGate } from '@/features/home/PortalGate'
 import { PortalHome } from '@/features/home/PortalHome'
+import { AppsProvider } from '@/features/launcher/AppsProvider'
 import { CompanyProvider } from '@/features/company/CompanyProvider'
 import { useAsync } from '@/hooks/useAsync'
 import { isDemoMode } from '@/features/demo/demoMode'
@@ -48,26 +49,28 @@ const App = () => {
   return (
     <CompanyProvider initialCompanyId={session.data.companyId}>
       <AlertsProvider>
-        <SkipLink />
-        <Header />
-        {/*
-          This wrapper reserves a full screen of height. The alert bands and the page are inserted inside it,
-          so nothing outside it moves, and the footer starts below the fold instead of being pushed down.
-        */}
-        <div className="min-h-dvh">
-          <AlertsGate>
-            <AlertsBar />
-            <main id="main" className="mx-auto max-w-6xl px-4 py-6">
-              <PortalHome employee={session.data} />
-            </main>
-          </AlertsGate>
-        </div>
-        <Footer />
-        {isDemoMode() && (
-          <Suspense fallback={null}>
-            <DemoPanel />
-          </Suspense>
-        )}
+        <AppsProvider>
+          <SkipLink />
+          <Header />
+          {/*
+            This wrapper reserves a full screen of height. The alert bands and the page are inserted inside it,
+            so nothing outside it moves, and the footer starts below the fold instead of being pushed down.
+          */}
+          <div className="min-h-dvh">
+            <PortalGate>
+              <AlertsBar />
+              <main id="main" className="mx-auto max-w-6xl px-4 py-6">
+                <PortalHome employee={session.data} />
+              </main>
+            </PortalGate>
+          </div>
+          <Footer />
+          {isDemoMode() && (
+            <Suspense fallback={null}>
+              <DemoPanel />
+            </Suspense>
+          )}
+        </AppsProvider>
       </AlertsProvider>
     </CompanyProvider>
   )

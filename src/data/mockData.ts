@@ -3,11 +3,19 @@ import type { Alert, NewsItem } from '@/types/portal'
 export interface Employee {
   id: string
   firstName: string
+  role: string
+  location: string
   /** The company the employee works for. They can still preview the others. */
   companyId: string
 }
 
-export const currentEmployee: Employee = { id: 'e-1042', firstName: 'Amara', companyId: 'ota' }
+export const currentEmployee: Employee = {
+  id: 'e-1042',
+  firstName: 'Amara',
+  role: 'Travel Consultant',
+  location: 'Online sales desk, Lagos',
+  companyId: 'ota',
+}
 
 export const alerts: Alert[] = [
   {
@@ -17,6 +25,7 @@ export const alerts: Alert[] = [
     body: 'Card payments are failing across all booking tools. Do not retry payments. Take bookings on hold and use the manual payment link until this is resolved.',
     publishedAt: '2026-10-17T08:05:00Z',
     companies: '*',
+    impact: { label: 'Payments failing', appIds: ['booking-engine', 'corporate-booking', 'agent-console'] },
   },
   {
     id: 'a-2',
@@ -25,6 +34,7 @@ export const alerts: Alert[] = [
     body: 'Searches are taking up to 20 seconds. Engineers are investigating.',
     publishedAt: '2026-10-17T07:40:00Z',
     companies: ['ota', 'holidays'],
+    impact: { label: 'Slow searches', appIds: ['booking-engine'] },
   },
   {
     id: 'a-3',

@@ -8,3 +8,10 @@ export const formatPublished = (isoTimestamp: string, timeZone?: string): string
 /** Just the clock time, e.g. "09:05". Same time-zone rule as formatPublished. */
 export const formatTimeOfDay = (isoTimestamp: string, timeZone?: string): string =>
   new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false, timeZone }).format(new Date(isoTimestamp))
+
+/** A long date for a greeting, e.g. "Sunday, 18 October". Same time-zone rule as formatPublished. */
+export const formatLongDate = (date: Date, timeZone?: string): string => {
+  const parts = new Intl.DateTimeFormat('en-GB', { weekday: 'long', day: 'numeric', month: 'long', timeZone }).formatToParts(date)
+  const part = (type: string) => parts.find((p) => p.type === type)?.value ?? ''
+  return `${part('weekday')}, ${part('day')} ${part('month')}`
+}

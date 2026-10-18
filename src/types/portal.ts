@@ -32,15 +32,29 @@ export interface Targeted {
   companies: CompanyId[] | '*'
 }
 
+/** Work waiting for the signed-in person in an app, for example 3 expense approvals. */
+export interface WaitingWork {
+  count: number
+  singular: string
+  plural: string
+}
+
 export interface PortalApp extends Targeted {
   id: string
   name: string
   description: string
   category: AppCategory
   url: string
+  waiting?: WaitingWork
 }
 
 export type Severity = 'information' | 'warning' | 'critical'
+
+/** Which apps an alert affects, and a short label for them, for example "Payments failing". */
+export interface AlertImpact {
+  label: string
+  appIds: string[]
+}
 
 export interface Alert extends Targeted {
   id: string
@@ -48,6 +62,7 @@ export interface Alert extends Targeted {
   title: string
   body: string
   publishedAt: string
+  impact?: AlertImpact
 }
 
 export interface NewsItem extends Targeted {

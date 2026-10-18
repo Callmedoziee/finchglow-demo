@@ -3,10 +3,11 @@ import type { ReactNode } from 'react'
 import { Header } from '@/components/layouts/Header'
 import { currentEmployee } from '@/data/mockData'
 import { AlertsBar } from '@/features/alerts/AlertsBar'
-import { AlertsGate } from '@/features/alerts/AlertsGate'
 import { AlertsProvider } from '@/features/alerts/AlertsProvider'
 import { CompanyProvider } from '@/features/company/CompanyProvider'
+import { PortalGate } from '@/features/home/PortalGate'
 import { PortalHome } from '@/features/home/PortalHome'
+import { AppsProvider } from '@/features/launcher/AppsProvider'
 
 /**
  * Renders the signed-in page the way App does: header, alert bands, then the page.
@@ -16,14 +17,16 @@ export const renderPortal = ({ companyId = 'ota', extra }: { companyId?: string;
   render(
     <CompanyProvider initialCompanyId={companyId}>
       <AlertsProvider>
-        <Header />
-        <AlertsGate>
-          <AlertsBar />
-          <main>
-            <PortalHome employee={currentEmployee} />
-          </main>
-        </AlertsGate>
-        {extra}
+        <AppsProvider>
+          <Header />
+          <PortalGate>
+            <AlertsBar />
+            <main>
+              <PortalHome employee={currentEmployee} />
+            </main>
+          </PortalGate>
+          {extra}
+        </AppsProvider>
       </AlertsProvider>
     </CompanyProvider>,
   )

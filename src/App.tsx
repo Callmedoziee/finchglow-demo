@@ -1,8 +1,7 @@
 import { fetchEmployee } from '@/api/mockApi'
 import { ErrorMessage, LoadingMessage } from '@/components/feedback'
-import { Greeting } from '@/components/Greeting'
 import { Header } from '@/components/Header'
-import { LauncherSection } from '@/components/LauncherSection'
+import { PortalHome } from '@/components/PortalHome'
 import { CompanyProvider } from '@/context/CompanyProvider'
 import { useAsync } from '@/hooks/useAsync'
 
@@ -42,10 +41,7 @@ const App = () => {
       <SkipLink />
       <Header />
       <main id="main" className="mx-auto max-w-6xl px-4 py-6">
-        <Greeting employee={session.data} />
-        <div className="mt-8">
-          <LauncherSection />
-        </div>
+        <PortalHome employee={session.data} />
       </main>
     </CompanyProvider>
   )

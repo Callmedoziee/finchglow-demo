@@ -1,4 +1,5 @@
 import { screen, within } from '@testing-library/react'
+import { chooseCompany } from '@/test/chooseCompany'
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { configureApi } from '@/services/mockApi'
@@ -36,7 +37,7 @@ describe('Greeting', () => {
     const section = await greeting()
     await section.findByText(/2 incidents affect tools you use today/i)
 
-    await user.selectOptions(screen.getByRole('combobox', { name: /company/i }), 'academy')
+    await chooseCompany(user, 'Lagos Aviation Academy')
 
     // The Academy has no app affected by an incident, but has its own waiting work.
     expect(await section.findByText('12 attendance sheets and 3 expense approvals are waiting for you.')).toBeInTheDocument()
@@ -48,7 +49,7 @@ describe('Greeting', () => {
     renderPortal({ companyId: 'ota' })
     const section = await greeting()
 
-    await user.selectOptions(screen.getByRole('combobox', { name: /company/i }), 'tmc')
+    await chooseCompany(user, 'FCM Travel Nigeria')
 
     expect(await section.findByText('You are viewing FCM Travel Nigeria. You work at Travelden.')).toBeInTheDocument()
   })

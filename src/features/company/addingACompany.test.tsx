@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react'
+import { chooseCompany } from '@/test/chooseCompany'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it } from 'vitest'
 import { Header } from '@/components/layouts/Header'
@@ -37,7 +38,7 @@ describe('Adding a seventh company by configuration only', () => {
       </CompanyProvider>,
     )
 
-    await user.selectOptions(screen.getByRole('combobox', { name: /company/i }), 'cargo')
+    await chooseCompany(user, 'Test Cargo Company')
 
     expect(screen.getByRole('img', { name: 'Test Cargo Company logo' })).toBeInTheDocument()
     expect(screen.getByText('Air cargo and freight')).toBeInTheDocument()

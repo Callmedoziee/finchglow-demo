@@ -1,4 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react'
+import { chooseCompany } from '@/test/chooseCompany'
 import userEvent from '@testing-library/user-event'
 import { axe } from 'vitest-axe'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
@@ -21,9 +22,9 @@ describe('App shell', () => {
   it('re-themes and updates the page when another company is selected', async () => {
     const user = userEvent.setup()
     render(<App />)
-    const switcher = await screen.findByRole('combobox', { name: /company/i })
+    await screen.findByRole('button', { name: /^company/i })
 
-    await user.selectOptions(switcher, 'academy')
+    await chooseCompany(user, 'Lagos Aviation Academy')
 
     expect(screen.getByText(/you are viewing lagos aviation academy/i)).toBeInTheDocument()
     await waitFor(() => expect(document.documentElement.dataset.company).toBe('academy'))

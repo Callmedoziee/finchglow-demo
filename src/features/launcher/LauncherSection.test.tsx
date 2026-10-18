@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react'
+import { chooseCompany } from '@/test/chooseCompany'
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { configureApi } from '@/services/mockApi'
@@ -37,7 +38,7 @@ describe('LauncherSection', () => {
     renderLauncher('ota')
     await screen.findByRole('link', { name: /booking engine/i })
 
-    await user.selectOptions(screen.getByRole('combobox', { name: /company/i }), 'b2b')
+    await chooseCompany(user, 'Finchglow Travels')
 
     expect(screen.getByRole('link', { name: /agent console/i })).toBeInTheDocument()
     expect(screen.queryByRole('link', { name: /booking engine/i })).not.toBeInTheDocument()

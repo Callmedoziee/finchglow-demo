@@ -4,6 +4,8 @@ import { AppTile } from '@/features/launcher/AppTile'
 import { ErrorMessage } from '@/components/ui/feedback'
 import { NewsCard } from '@/features/news/NewsCard'
 import { useCompany } from '@/features/company/companyContext'
+import { useAlerts } from '@/features/alerts/alertsContext'
+import { incidentFor } from '@/features/alerts/incidentFor'
 import { useAsync } from '@/hooks/useAsync'
 
 interface Props {
@@ -17,6 +19,8 @@ interface Props {
  */
 export const SearchResultsSection = ({ query, onClear }: Props) => {
   const { company } = useCompany()
+  const alerts = useAlerts()
+  const activeAlerts = alerts.status === 'success' ? [...alerts.critical, ...alerts.other] : []
   const runSearch = useCallback(() => searchContent(query, company.id), [query, company.id])
   const search = useAsync(runSearch)
 
@@ -64,7 +68,7 @@ export const SearchResultsSection = ({ query, onClear }: Props) => {
           <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {search.data.apps.map((app) => (
               <li key={app.id}>
-                <AppTile app={app} />
+                <AppTile app={app} incident={incidentFor(app.id, activeAlerts)} />
               </li>
             ))}
           </ul>

@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { configureApi } from '@/services/mockApi'
+import { AlertsProvider } from '@/features/alerts/AlertsProvider'
 import { AppsProvider } from './AppsProvider'
 import { LauncherSection } from './LauncherSection'
 import { CompanySwitcher } from '@/features/company/CompanySwitcher'
@@ -10,10 +11,12 @@ import { CompanyProvider } from '@/features/company/CompanyProvider'
 const renderLauncher = (companyId: string) =>
   render(
     <CompanyProvider initialCompanyId={companyId}>
-      <AppsProvider>
-        <CompanySwitcher />
-        <LauncherSection />
-      </AppsProvider>
+      <AlertsProvider>
+        <AppsProvider>
+          <CompanySwitcher />
+          <LauncherSection />
+        </AppsProvider>
+      </AlertsProvider>
     </CompanyProvider>,
   )
 
@@ -40,12 +43,23 @@ describe('LauncherSection', () => {
     expect(screen.queryByRole('link', { name: /booking engine/i })).not.toBeInTheDocument()
   })
 
-  it('groups apps under category headings', async () => {
+  it('badges an app with the incident affecting it', async () => {
+    renderLauncher('ota')
+
+    expect(await screen.findByRole('link', { name: /booking engine.*payments failing/i })).toBeInTheDocument()
+  })
+
+  it('badges an app with the work waiting for the person when nothing is wrong', async () => {
+    renderLauncher('academy')
+
+    expect(await screen.findByRole('link', { name: /course manager.*12 waiting for you/i })).toBeInTheDocument()
+  })
+
+  it('shows how many apps there are', async () => {
     renderLauncher('ota')
     await screen.findByRole('link', { name: /booking engine/i })
 
-    expect(screen.getByRole('heading', { level: 3, name: 'Booking' })).toBeInTheDocument()
-    expect(screen.getByRole('heading', { level: 3, name: 'People' })).toBeInTheDocument()
+    expect(screen.getByText(/^\d+ apps?$/)).toBeInTheDocument()
   })
 
   it('shows an error with Retry when the apps fail to load, then recovers', async () => {

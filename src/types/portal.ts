@@ -24,7 +24,19 @@ export interface Company {
   accentSoft: string
 }
 
-export type AppCategory = 'booking' | 'sales' | 'people' | 'learning' | 'operations' | 'finance'
+/** The icons an app can use. Each one is a file in components/icon and an entry in features/launcher/appIcons.ts. */
+export type AppIconName =
+  | 'plane'
+  | 'users'
+  | 'briefcase'
+  | 'contact'
+  | 'handshake'
+  | 'calendar'
+  | 'package'
+  | 'graduation-cap'
+  | 'wrench'
+  | 'id-card'
+  | 'receipt'
 
 /** Anything that can be shown to some companies and hidden from others. */
 export interface Targeted {
@@ -43,7 +55,7 @@ export interface PortalApp extends Targeted {
   id: string
   name: string
   description: string
-  category: AppCategory
+  icon: AppIconName
   url: string
   waiting?: WaitingWork
 }

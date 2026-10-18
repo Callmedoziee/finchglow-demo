@@ -40,6 +40,8 @@
   --color-success-soft: #ecfdf3;
   --color-warning: #93370d;
   --color-warning-soft: #fff6e5;
+  --color-critical: #b42318;
+  --color-critical-soft: #fef3f2;
 }
 
 body {

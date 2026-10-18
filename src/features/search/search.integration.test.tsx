@@ -25,7 +25,7 @@ describe('Search', () => {
     expect(await screen.findByText(/2 results for "booking"/i)).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /booking engine/i })).toBeInTheDocument()
     expect(screen.getByText('Summer holiday packages open for booking')).toBeInTheDocument()
-    expect(screen.queryByRole('heading', { name: 'Your apps' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('heading', { name: 'Your tools' })).not.toBeInTheDocument()
   })
 
   it('keeps the critical alert on screen while searching', async () => {
@@ -51,7 +51,7 @@ describe('Search', () => {
     expect(await screen.findByText(/nothing found for/i)).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: /clear search/i }))
 
-    expect(await screen.findByRole('heading', { name: 'Your apps' })).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { name: 'Your tools' })).toBeInTheDocument()
   })
 
   it('shows an error with Retry when the search fails, then recovers', async () => {

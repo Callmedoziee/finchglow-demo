@@ -1,22 +1,31 @@
-import { AppTile } from './AppTile'
 import { ErrorMessage, LoadingMessage } from '@/components/ui/feedback'
-import { StaleNotice } from '@/features/offline/StaleNotice'
+import { useAlerts } from '@/features/alerts/alertsContext'
+import { incidentFor } from '@/features/alerts/incidentFor'
 import { useCompany } from '@/features/company/companyContext'
-import { useApps } from './appsContext'
-import { groupApps } from './groupApps'
+import { StaleNotice } from '@/features/offline/StaleNotice'
 import { filterForCompany } from '@/lib/visibility'
 import type { PortalApp } from '@/types/portal'
+import { AppTile } from './AppTile'
+import { useApps } from './appsContext'
 
-/** The launcher grid: the apps the selected company can open, grouped by category. */
+/** The launcher grid: the apps the selected company can open, each with any incident or waiting work. */
 export const LauncherSection = () => {
   const { company } = useCompany()
   const appsRequest = useApps()
 
+  const visibleApps =
+    appsRequest.status === 'success' || appsRequest.status === 'stale' ? filterForCompany(appsRequest.data, company.id) : []
+
   return (
     <section aria-labelledby="launcher-heading">
-      <h2 id="launcher-heading" className="text-xl font-semibold">
-        Your apps
-      </h2>
+      <div className="flex items-baseline gap-3">
+        <h2 id="launcher-heading" className="text-xl font-bold">
+          Your tools
+        </h2>
+        {visibleApps.length > 0 && (
+          <span className="text-sm text-subtle">{visibleApps.length === 1 ? '1 app' : `${visibleApps.length} apps`}</span>
+        )}
+      </div>
 
       {appsRequest.status === 'loading' && <LoadingMessage label="Loading your apps..." />}
 
@@ -38,35 +47,27 @@ export const LauncherSection = () => {
       )}
 
       {(appsRequest.status === 'success' || appsRequest.status === 'stale') && (
-        <AppGroups apps={filterForCompany(appsRequest.data, company.id)} companyName={company.name} />
+        <AppGrid apps={visibleApps} companyName={company.name} />
       )}
     </section>
   )
 }
 
-const AppGroups = ({ apps, companyName }: { apps: PortalApp[]; companyName: string }) => {
-  const groups = groupApps(apps)
+const AppGrid = ({ apps, companyName }: { apps: PortalApp[]; companyName: string }) => {
+  const alerts = useAlerts()
+  const activeAlerts = alerts.status === 'success' ? [...alerts.critical, ...alerts.other] : []
 
-  if (groups.length === 0) {
+  if (apps.length === 0) {
     return <p className="mt-3 text-muted">No apps are available for {companyName} yet.</p>
   }
 
   return (
-    <div className="mt-3 flex flex-col gap-6">
-      {groups.map((group) => (
-        <section key={group.category} aria-labelledby={`group-${group.category}`}>
-          <h3 id={`group-${group.category}`} className="mb-2 text-sm font-semibold uppercase tracking-wide text-muted">
-            {group.label}
-          </h3>
-          <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-            {group.apps.map((app) => (
-              <li key={app.id}>
-                <AppTile app={app} />
-              </li>
-            ))}
-          </ul>
-        </section>
+    <ul className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {apps.map((app) => (
+        <li key={app.id}>
+          <AppTile app={app} incident={incidentFor(app.id, activeAlerts)} />
+        </li>
       ))}
-    </div>
+    </ul>
   )
 }

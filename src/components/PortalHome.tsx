@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { AlertsFeed } from '@/components/AlertsFeed'
 import { CriticalAlert } from '@/components/CriticalAlert'
-import { ErrorMessage } from '@/components/feedback'
+import { ErrorMessage, LoadingMessage } from '@/components/feedback'
 import { Greeting } from '@/components/Greeting'
 import { LauncherSection } from '@/components/LauncherSection'
 import { NewsFeed } from '@/components/NewsFeed'
@@ -12,14 +12,21 @@ import { StaleNotice } from '@/components/StaleNotice'
 import { useCompany } from '@/context/companyContext'
 import type { Employee } from '@/data/mockData'
 import { useDebouncedValue } from '@/hooks/useDebouncedValue'
+import { useHasElapsed } from '@/hooks/useHasElapsed'
 import { useVisibleAlerts } from '@/hooks/useVisibleAlerts'
 
 const SEARCH_DELAY_MS = 250
+/** The longest we hold the page back while waiting for alerts. */
+const ALERTS_WAIT_LIMIT_MS = 1500
 
 /** Everything inside <main> once the employee is signed in. Critical alerts come first. */
 export const PortalHome = ({ employee }: { employee: Employee }) => {
   const { company } = useCompany()
   const alerts = useVisibleAlerts()
+  const waitedLongEnough = useHasElapsed(ALERTS_WAIT_LIMIT_MS)
+  // Alerts settle first. If they arrived after the rest of the page, a critical banner would be inserted
+  // above everything and shove the page down. A slow alerts service can only hold the page for a limited time.
+  const isCheckingAlerts = alerts.status === 'loading' && !waitedLongEnough
   const [query, setQuery] = useState('')
   const debouncedQuery = useDebouncedValue(query.trim(), SEARCH_DELAY_MS)
   // Emptying the box returns to the normal page straight away; only typing waits for the pause.
@@ -47,18 +54,24 @@ export const PortalHome = ({ employee }: { employee: Employee }) => {
         </div>
       )}
 
-      <Greeting employee={employee} />
-      <SearchBar value={query} onChange={setQuery} />
-
-      {activeQuery !== '' ? (
-        <SearchResultsSection key={`${company.id}:${activeQuery}`} query={activeQuery} onClear={() => setQuery('')} />
+      {isCheckingAlerts ? (
+        <LoadingMessage label="Checking for alerts..." />
       ) : (
         <>
-          <LauncherSection />
-          <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
-            {alerts.status === 'success' && <AlertsFeed alerts={alerts.other} />}
-            <NewsFeed />
-          </div>
+          <Greeting employee={employee} />
+          <SearchBar value={query} onChange={setQuery} />
+
+          {activeQuery !== '' ? (
+            <SearchResultsSection key={`${company.id}:${activeQuery}`} query={activeQuery} onClear={() => setQuery('')} />
+          ) : (
+            <>
+              <LauncherSection />
+              <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+                {alerts.status === 'success' && <AlertsFeed alerts={alerts.other} />}
+                <NewsFeed />
+              </div>
+            </>
+          )}
         </>
       )}
     </div>

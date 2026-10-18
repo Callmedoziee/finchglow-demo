@@ -15,32 +15,33 @@ export interface Company {
 
 export type AppCategory = 'booking' | 'sales' | 'people' | 'learning' | 'operations' | 'finance'
 
-export interface PortalApp {
+/** Anything that can be shown to some companies and hidden from others. */
+export interface Targeted {
+  /** Company ids this item is for. Use '*' for the whole group. */
+  companies: CompanyId[] | '*'
+}
+
+export interface PortalApp extends Targeted {
   id: string
   name: string
   description: string
   category: AppCategory
   url: string
-  /** Company ids that can launch this app. Use '*' for every company. */
-  companies: CompanyId[] | '*'
 }
 
 export type Severity = 'information' | 'warning' | 'critical'
 
-export interface Alert {
+export interface Alert extends Targeted {
   id: string
   severity: Severity
   title: string
   body: string
   publishedAt: string
-  /** Company ids this item is for. Use '*' for group-wide. */
-  companies: CompanyId[] | '*'
 }
 
-export interface NewsItem {
+export interface NewsItem extends Targeted {
   id: string
   title: string
   summary: string
   publishedAt: string
-  companies: CompanyId[] | '*'
 }

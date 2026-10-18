@@ -29,7 +29,7 @@ export const AlertsBar = () => {
         </div>
       )}
 
-      {alerts.status === 'success' && alerts.critical.map((alert) => <CriticalAlert key={alert.id} alert={alert} />)}
+      {alerts.status === 'success' && alerts.critical.map((alert) => <CriticalAlert key={alert.id} alert={alert} savedAt={alerts.savedAt} />)}
     </div>
   )
 }

@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { loadFromCache, saveToCache } from './offlineCache'
+import { clearSavedData, loadFromCache, saveToCache } from './offlineCache'
 
 afterEach(() => {
   vi.restoreAllMocks()
@@ -34,5 +34,17 @@ describe('offline cache', () => {
       throw new Error('QuotaExceededError')
     })
     expect(() => saveToCache('alerts', [])).not.toThrow()
+  })
+
+  it('clears only the portal\'s own saved copies', () => {
+    saveToCache('alerts', [])
+    saveToCache('news', [])
+    localStorage.setItem('something-else', 'keep me')
+
+    clearSavedData()
+
+    expect(loadFromCache('alerts')).toBeNull()
+    expect(loadFromCache('news')).toBeNull()
+    expect(localStorage.getItem('something-else')).toBe('keep me')
   })
 })

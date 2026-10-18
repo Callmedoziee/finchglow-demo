@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react'
+import { lazy, Suspense, useCallback, useState } from 'react'
 import { fetchEmployee } from '@/services/mockApi'
 import { ErrorMessage, LoadingMessage } from '@/components/ui/feedback'
 import { Footer } from '@/components/layouts/Footer'
@@ -11,6 +11,10 @@ import { AppsProvider } from '@/features/launcher/AppsProvider'
 import { CompanyProvider } from '@/features/company/CompanyProvider'
 import { useAsync } from '@/hooks/useAsync'
 import { isDemoMode } from '@/features/demo/demoMode'
+import { getSharedDevice } from '@/features/device/deviceConfig'
+import { SharedDeviceBar } from '@/features/device/SharedDeviceBar'
+import { SignedOutScreen } from '@/features/device/SignedOutScreen'
+import { clearSavedData } from '@/features/offline/offlineCache'
 
 // Loaded on demand: normal users never download the demo controls.
 const DemoPanel = lazy(() => import('@/features/demo/DemoPanel').then((module) => ({ default: module.DemoPanel })))
@@ -30,6 +34,16 @@ const SkipLink = () => (
  */
 const App = () => {
   const session = useAsync(fetchEmployee)
+  const [isSignedOut, setIsSignedOut] = useState(false)
+  const sharedDevice = getSharedDevice()
+
+  // Wipe the saved copies first, then drop the whole tree. With the providers gone nothing can save again.
+  const signOut = useCallback(() => {
+    clearSavedData()
+    setIsSignedOut(true)
+  }, [])
+
+  if (isSignedOut) return <SignedOutScreen />
 
   if (session.status !== 'success') {
     return (
@@ -59,6 +73,9 @@ const App = () => {
           <div className="min-h-dvh">
             <PortalGate>
               <AlertsBar />
+              {sharedDevice && (
+                <SharedDeviceBar device={sharedDevice} firstName={session.data.firstName} onSignOut={signOut} />
+              )}
               <main id="main" className="mx-auto max-w-6xl px-4 py-6">
                 <PortalHome employee={session.data} />
               </main>

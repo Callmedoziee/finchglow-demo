@@ -3,6 +3,7 @@ import { useAlerts } from '@/features/alerts/alertsContext'
 import { incidentFor } from '@/features/alerts/incidentFor'
 import { useCompany } from '@/features/company/companyContext'
 import { StaleNotice } from '@/features/offline/StaleNotice'
+import { useOnlineStatus } from '@/features/offline/useOnlineStatus'
 import { filterForCompany } from '@/lib/visibility'
 import type { PortalApp } from '@/types/portal'
 import { AppTile } from './AppTile'
@@ -12,6 +13,7 @@ import { useApps } from './appsContext'
 export const LauncherSection = () => {
   const { company } = useCompany()
   const appsRequest = useApps()
+  const isOnline = useOnlineStatus()
 
   const visibleApps =
     appsRequest.status === 'success' || appsRequest.status === 'stale' ? filterForCompany(appsRequest.data, company.id) : []
@@ -25,6 +27,7 @@ export const LauncherSection = () => {
         {visibleApps.length > 0 && (
           <span className="text-sm text-subtle">{visibleApps.length === 1 ? '1 app' : `${visibleApps.length} apps`}</span>
         )}
+        {!isOnline && <span className="ml-auto text-sm text-subtle">Opens when online</span>}
       </div>
 
       {appsRequest.status === 'loading' && <LoadingMessage label="Loading your apps..." />}

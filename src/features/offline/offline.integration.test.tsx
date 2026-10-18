@@ -24,6 +24,7 @@ describe('Offline behaviour', () => {
 
     expect(await screen.findByRole('alert', { name: /payment gateway failure/i })).toBeInTheDocument()
     expect(screen.getByText(/showing saved alerts from/i)).toBeInTheDocument()
+    expect(screen.getByRole('alert', { name: /payment gateway failure/i })).toHaveTextContent(/saved copy from/i)
     expect(screen.queryByText(/alerts could not be loaded/i)).not.toBeInTheDocument()
   })
 
@@ -46,6 +47,18 @@ describe('Offline behaviour', () => {
 
     act(() => setOnline(true))
     await waitFor(() => expect(screen.queryByText('You are offline')).not.toBeInTheDocument())
+  })
+
+  it('says the tools open when online while the device is offline', async () => {
+    saveToCache(CACHE_KEYS.alerts, alerts)
+    renderHome()
+    await screen.findByRole('alert', { name: /payment gateway failure/i })
+    expect(screen.queryByText('Opens when online')).not.toBeInTheDocument()
+
+    configureApi({ failureRate: 1 })
+    act(() => setOnline(false))
+
+    expect(await screen.findByText('Opens when online')).toBeInTheDocument()
   })
 
   it('refreshes by itself when the connection returns, replacing the saved copy with fresh alerts', async () => {

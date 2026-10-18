@@ -37,3 +37,13 @@ export const loadFromCache = <T>(key: string): CacheEntry<T> | null => {
     return null
   }
 }
+
+/** Removes every saved copy this portal made on the device. Used when someone signs out of a shared device. */
+export const clearSavedData = (): void => {
+  try {
+    const ownKeys = Object.keys(localStorage).filter((key) => key.startsWith(PREFIX))
+    ownKeys.forEach((key) => localStorage.removeItem(key))
+  } catch {
+    // Storage is blocked, so nothing was saved in the first place.
+  }
+}

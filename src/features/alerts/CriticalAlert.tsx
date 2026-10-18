@@ -9,7 +9,7 @@ import type { Alert } from '@/types/portal'
  * A critical alert is a solid, full-width band that sits under the header and is not dismissible.
  * role="alert" makes screen readers announce it immediately when it appears.
  */
-export const CriticalAlert = ({ alert }: { alert: Alert }) => {
+export const CriticalAlert = ({ alert, savedAt }: { alert: Alert; savedAt?: string | null }) => {
   const titleId = useId()
   const style = severityStyles.critical
 
@@ -35,6 +35,7 @@ export const CriticalAlert = ({ alert }: { alert: Alert }) => {
             </span>
             <span>
               {audienceLabel(alert)} · Started <time dateTime={alert.publishedAt}>{formatTimeOfDay(alert.publishedAt)}</time>
+              {savedAt && <> · Saved copy from <time dateTime={savedAt}>{formatTimeOfDay(savedAt)}</time></>}
             </span>
           </p>
           <h2 id={titleId} className="mt-1 text-lg font-bold sm:text-xl">

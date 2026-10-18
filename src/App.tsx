@@ -46,7 +46,8 @@ const App = () => {
     <CompanyProvider initialCompanyId={session.data.companyId}>
       <SkipLink />
       <Header />
-      <main id="main" className="mx-auto max-w-6xl px-4 py-6">
+      {/* min-h-dvh reserves a full screen, so the footer starts below the fold and is not pushed down as content loads. */}
+      <main id="main" className="mx-auto min-h-dvh max-w-6xl px-4 py-6">
         <PortalHome employee={session.data} />
       </main>
       <Footer />

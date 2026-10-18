@@ -4,10 +4,11 @@
 
 | File | Raw | Gzip |
 |---|---|---|
-| JavaScript (main) | 245 kB | 76.5 kB |
-| CSS | 15 kB | 3.8 kB |
-| Demo controls (loaded only with `?demo=1`) | 1.1 kB | 0.6 kB |
-| Page weight Lighthouse measured | 81 KiB total | |
+| JavaScript (main) | 247 kB | 76.8 kB |
+| CSS | 15.6 kB | 3.9 kB |
+| Demo controls (loaded only with `?demo=1`) | 1.0 kB | 0.5 kB |
+| Brand logo (only the selected company's is downloaded) | 3 to 13 kB each | WebP, already compressed |
+| Page weight Lighthouse measured | 103 KiB total | |
 
 Sizes are as reported by Vite (1 kB = 1,000 bytes). Brotli, which most hosts use, is about 15% smaller than gzip.
 
@@ -29,18 +30,19 @@ So nearly all of the weight is React itself. Our code is small, and part of it i
 - Tailwind generates only the CSS classes actually used, so the stylesheet is 3.8 kB gzipped.
 - System fonts, so there are no font downloads and no flash of unstyled text.
 - Demo controls are split into their own file and only downloaded when `?demo=1` is present.
-- No images.
+- Logos are the only images. They were resized from up to 4096px wide down to 96px tall (enough for sharp display on high-resolution screens) and converted to WebP, which took the largest from 217 kB to 3 kB. Only the selected company's logo is downloaded.
 
 ## Lighthouse (mobile, simulated slow 4G, production build served locally)
 
-| | First run | After fix |
-|---|---|---|
-| Performance | 77 | **100** |
-| Accessibility | 100 | 100 |
-| Best practices | 100 | 100 |
-| Cumulative layout shift | **0.603** | **0.006** |
-| First and largest contentful paint | 1.4 s | 1.4 s |
-| Total blocking time | 0 ms | 0 ms |
+| | First run | After alerts fix | After real logos and footer |
+|---|---|---|---|
+| Performance | 77 | 100 | **100** |
+| Accessibility | 100 | 100 | 100 |
+| Best practices | 100 | 100 | 100 |
+| Cumulative layout shift | **0.603** | 0.006 | **0** |
+| First contentful paint | 1.4 s | 1.4 s | 1.4 s |
+| Largest contentful paint | 1.4 s | 1.4 s | 1.5 s |
+| Total blocking time | 0 ms | 0 ms | 0 ms |
 
 ### The layout shift problem, and the fix
 
@@ -55,3 +57,9 @@ The trade-off: for up to 1.5 seconds staff see a short status line instead of th
 - One Lighthouse run on a local preview server. Results vary a little between runs.
 - The mock API adds a fixed 400 ms delay. A real network and server will behave differently, so treat these as a baseline.
 - Lab numbers are not field data. In production I would also measure real users.
+
+### A second layout shift, caused by my own footer
+
+After adding the real branding, layout shift rose to 0.142 and performance dropped to 94. The new footer was visible while the page was still loading, then was pushed down as content arrived. Fix: the main area reserves a full screen of height (`min-h-dvh`), so the footer starts below the fold. Layout shift returned to 0. The lesson is to re-measure after every visual change, because shifts come from anything that appears above something already on screen.
+
+Logo images carry their real `width` and `height` attributes (stored with each company in the config), so the browser reserves their space before they load.

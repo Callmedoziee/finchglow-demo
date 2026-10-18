@@ -45,19 +45,20 @@ export const CompanySwitcher = () => {
     triggerRef.current?.focus()
   }
 
+  // Full width on phones, like the old select: the sync chip then always sits on its own row, so the header never changes height.
   return (
-    <div ref={wrapperRef} className="relative">
+    <div ref={wrapperRef} className="relative w-full sm:w-auto">
       <button
         ref={triggerRef}
         type="button"
         aria-expanded={isOpen}
         aria-controls={panelId}
         onClick={() => setIsOpen((open) => !open)}
-        className="flex min-h-11 items-center gap-2 rounded-lg border border-line bg-surface px-3 text-base text-foreground"
+        className="flex min-h-11 w-full items-center gap-2 rounded-lg sm:w-auto border border-line bg-surface px-3 text-base text-foreground"
       >
         <span className="text-sm font-medium text-muted">Company</span>
         <span className="font-semibold">{company.name}</span>
-        <ChevronsUpDownIcon className="size-4 text-muted" />
+        <ChevronsUpDownIcon className="ml-auto size-4 text-muted sm:ml-0" />
       </button>
 
       {isOpen && (

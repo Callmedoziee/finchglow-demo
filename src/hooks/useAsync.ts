@@ -16,7 +16,6 @@ export const useAsync = <T>(loadData: () => Promise<T>): AsyncState<T> & { reloa
 
   useEffect(() => {
     let cancelled = false
-    setAsyncState({ status: 'loading' })
     loadData()
       .then((data) => {
         if (!cancelled) setAsyncState({ status: 'success', data })
@@ -29,6 +28,10 @@ export const useAsync = <T>(loadData: () => Promise<T>): AsyncState<T> & { reloa
     }
   }, [loadData, retryCount])
 
-  const reload = useCallback(() => setRetryCount((count) => count + 1), [])
+  // Going back to "loading" happens in the event that caused it (the retry), not inside the effect.
+  const reload = useCallback(() => {
+    setAsyncState({ status: 'loading' })
+    setRetryCount((count) => count + 1)
+  }, [])
   return { ...asyncState, reload }
 }

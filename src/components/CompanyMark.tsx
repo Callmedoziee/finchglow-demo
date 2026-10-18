@@ -1,4 +1,4 @@
-import type { Company } from '../types/portal'
+import type { Company } from '@/types/portal'
 
 /** The company's logo: a coloured tile with its initials. Decorative, so hidden from screen readers. */
 export const CompanyMark = ({ company }: { company: Company }) => (

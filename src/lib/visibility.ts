@@ -1,4 +1,4 @@
-import type { Alert, CompanyId, Severity, Targeted } from '../types/portal'
+import type { Alert, CompanyId, Severity, Targeted } from '@/types/portal'
 
 /** True when the item is group-wide or lists this company. */
 export const isVisibleTo = (item: Targeted, companyId: CompanyId): boolean =>

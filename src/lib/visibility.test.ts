@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { alerts } from '../data/mockData'
+import { alerts } from '@/data/mockData'
 import { filterForCompany, isVisibleTo, sortAlerts } from './visibility'
 
 describe('isVisibleTo', () => {

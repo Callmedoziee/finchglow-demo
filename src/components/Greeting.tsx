@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import { getCompany } from '../config/companies'
-import { useCompany } from '../context/companyContext'
-import type { Employee } from '../data/mockData'
-import { greetingFor } from '../lib/greeting'
+import { getCompany } from '@/config/companies'
+import { useCompany } from '@/context/companyContext'
+import type { Employee } from '@/data/mockData'
+import { greetingFor } from '@/lib/greeting'
 
 interface Props {
   employee: Employee

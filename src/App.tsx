@@ -1,9 +1,9 @@
-import { fetchEmployee } from './api/mockApi'
-import { ErrorMessage, LoadingMessage } from './components/feedback'
-import { Greeting } from './components/Greeting'
-import { Header } from './components/Header'
-import { CompanyProvider } from './context/CompanyProvider'
-import { useAsync } from './hooks/useAsync'
+import { fetchEmployee } from '@/api/mockApi'
+import { ErrorMessage, LoadingMessage } from '@/components/feedback'
+import { Greeting } from '@/components/Greeting'
+import { Header } from '@/components/Header'
+import { CompanyProvider } from '@/context/CompanyProvider'
+import { useAsync } from '@/hooks/useAsync'
 
 const SkipLink = () => (
   <a

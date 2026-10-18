@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react'
-import { getCompany } from '../config/companies'
-import { applyTheme } from '../theme/applyTheme'
-import type { CompanyId } from '../types/portal'
+import { getCompany } from '@/config/companies'
+import { applyTheme } from '@/theme/applyTheme'
+import type { CompanyId } from '@/types/portal'
 import { CompanyContext, type CompanyContextValue } from './companyContext'
 
 interface Props {

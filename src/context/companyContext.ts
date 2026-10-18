@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react'
-import type { Company, CompanyId } from '../types/portal'
+import type { Company, CompanyId } from '@/types/portal'
 
 export interface CompanyContextValue {
   company: Company

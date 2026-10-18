@@ -1,4 +1,4 @@
-import type { Company } from '../types/portal'
+import type { Company } from '@/types/portal'
 
 /**
  * Add a subsidiary by adding one entry here, then list its apps in apps.ts

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { contrastRatio } from '../theme/contrast'
+import { contrastRatio } from '@/theme/contrast'
 import { companies, defaultCompanyId, getCompany } from './companies'
 
 const cases = companies.map((company) => [company.name, company] as const)

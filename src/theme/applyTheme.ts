@@ -1,4 +1,4 @@
-import type { Company } from '../types/portal'
+import type { Company } from '@/types/portal'
 
 /** Writes the company's tokens as CSS variables. Components only read variables. */
 export const applyTheme = (company: Company, root: HTMLElement = document.documentElement): void => {

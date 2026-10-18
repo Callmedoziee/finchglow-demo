@@ -1,6 +1,6 @@
 import { useId } from 'react'
-import { companies } from '../config/companies'
-import { useCompany } from '../context/companyContext'
+import { companies } from '@/config/companies'
+import { useCompany } from '@/context/companyContext'
 
 /** A native <select>: keyboard, screen reader and mobile pickers all work without extra code. */
 export const CompanySwitcher = () => {

@@ -1,4 +1,4 @@
-import type { Alert, NewsItem } from '../types/portal'
+import type { Alert, NewsItem } from '@/types/portal'
 
 export interface Employee {
   id: string

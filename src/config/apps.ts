@@ -1,4 +1,4 @@
-import type { PortalApp } from '../types/portal'
+import type { PortalApp } from '@/types/portal'
 
 /**
  * The app catalogue. `companies` decides who sees each tile:

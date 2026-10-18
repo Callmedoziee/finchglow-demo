@@ -2,7 +2,7 @@ import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { axe } from 'vitest-axe'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
-import { configureApi } from './api/mockApi'
+import { configureApi } from '@/api/mockApi'
 import App from './App'
 
 beforeEach(() => configureApi({ delayMs: 0, failureRate: 0 }))

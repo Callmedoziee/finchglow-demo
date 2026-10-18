@@ -1,4 +1,4 @@
-import { useCompany } from '../context/companyContext'
+import { useCompany } from '@/context/companyContext'
 import { CompanyMark } from './CompanyMark'
 import { CompanySwitcher } from './CompanySwitcher'
 

@@ -1,6 +1,6 @@
-import { apps } from '../config/apps'
-import { alerts, currentEmployee, news, type Employee } from '../data/mockData'
-import type { Alert, NewsItem, PortalApp } from '../types/portal'
+import { apps } from '@/config/apps'
+import { alerts, currentEmployee, news, type Employee } from '@/data/mockData'
+import type { Alert, NewsItem, PortalApp } from '@/types/portal'
 
 export interface ApiBehaviour {
   /** Milliseconds each call takes, to make loading states visible. */

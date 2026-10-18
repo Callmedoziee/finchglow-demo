@@ -13,6 +13,17 @@ describe('company config', () => {
     expect(contrastRatio(company.accent, '#ffffff')).toBeGreaterThanOrEqual(4.5)
   })
 
+  it.each(cases)('%s accent meets 4.5:1 on its own soft tint (used for chips and highlights)', (_name, company) => {
+    expect(contrastRatio(company.accent, company.accentSoft)).toBeGreaterThanOrEqual(4.5)
+  })
+
+  it.each(cases.filter(([, company]) => company.logoBackground.toLowerCase() !== '#ffffff'))(
+    '%s white logo keeps 3:1 against its pill (the minimum for graphics)',
+    (_name, company) => {
+      expect(contrastRatio('#ffffff', company.logoBackground)).toBeGreaterThanOrEqual(3)
+    },
+  )
+
   it('has unique ids', () => {
     expect(new Set(companies.map((company) => company.id)).size).toBe(companies.length)
   })

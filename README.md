@@ -88,7 +88,7 @@ Rules I followed:
 
 No component changes are needed:
 
-1. Add one entry to `src/configs/companies.ts`: id, name, tagline, logo (path, size, alt text) and the accent colours.
+1. Add one entry to `src/configs/companies.ts`: id, name, tagline, logo (path, size, alt text), the colour behind the logo, and the accent colours.
 2. Put the logo in `public/brands/`.
 3. List the new id in the `companies` field of each app in `src/configs/apps.ts` that the new company should see.
 4. Optionally add alerts and news in `src/data/mockData.ts`. Group-wide items appear automatically.

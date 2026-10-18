@@ -12,6 +12,6 @@ describe('severity colours', () => {
   })
 
   it.each(severities)('%s border meets the 3:1 non-text contrast against the page', (severity) => {
-    expect(contrastRatio(severityStyles[severity].border, '#f7f8fa')).toBeGreaterThanOrEqual(3)
+    expect(contrastRatio(severityStyles[severity].border, '#f5f7fa')).toBeGreaterThanOrEqual(3)
   })
 })

@@ -14,6 +14,8 @@ export interface Company {
   id: CompanyId
   name: string
   logo: CompanyLogo
+  /** The colour behind the logo. Most logos are white, so they sit on a brand-coloured pill. */
+  logoBackground: string
   tagline: string
   /** Accent used for buttons, links and focus. Must reach 4.5:1 against `onAccent`. */
   accent: string

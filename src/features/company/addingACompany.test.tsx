@@ -10,7 +10,8 @@ import { CompanyProvider } from './CompanyProvider'
 const seventhCompany: Company = {
   id: 'cargo',
   name: 'Test Cargo Company',
-  logo: { src: '/brands/finchglobal.webp', width: 451, height: 96, alt: 'Test Cargo Company logo' },
+  logo: { src: '/brands/travelden-white.png', width: 216, height: 66, alt: 'Test Cargo Company logo' },
+  logoBackground: '#136d3d',
   tagline: 'Air cargo and freight',
   accent: '#136d3d',
   onAccent: '#ffffff',

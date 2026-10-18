@@ -9,7 +9,7 @@ This is a front-end prototype. There is no real backend: a small mock API serves
 ```bash
 yarn install
 yarn dev        # http://localhost:5173
-yarn test       # 192 tests
+yarn test       # 190 tests
 yarn lint
 yarn build      # production build into dist/
 yarn preview    # serve the production build
@@ -55,7 +55,7 @@ I developed on Node 24 and use yarn.
 | **Extra: offline-friendly behaviour**, including a shared-device mode that clears saved data | `features/offline`, `features/device` |
 | A seventh subsidiary by configuration, not copied code | `configs/companies.ts` |
 | Error handling and loading states, API sometimes fails | `hooks/useAsync.ts`, `components/ui` |
-| A few meaningful tests | 192 tests, next to the code they test |
+| A few meaningful tests | 190 tests, next to the code they test |
 | Bundle size and how it was kept small | below, and `docs/performance.md` |
 | Sign-in plan, no secrets | below |
 
@@ -88,7 +88,7 @@ Rules I followed:
 
 **Loading and errors.** `useAsync` turns any request into one of three states: loading, success or error, with a `reload`. Every section handles all three. Errors that matter say so loudly: if alerts fail to load, the page shows an error instead of an empty list that could be mistaken for "all clear".
 
-**Search.** The search field opens a search box over the page (a native `<dialog>`, so the browser provides the focus trap, Escape to close and returning focus). Typing waits for a short pause (250 ms), then two separate requests run, one for apps and one for news, so if one fails the other's results still show with a Retry for the failed one. The mock API applies the company filter on its side, as a real service would. Every result is a real link, so the arrow keys, Enter and Tab work. Opening a news result jumps to it in the Alerts and news card, because news has no page of its own.
+**Search.** The search field opens a search box over the page (a native `<dialog>`, so the browser provides the focus trap, Escape to close and returning focus). Typing waits for a short pause (250 ms), then two separate requests run, one for apps and one for news, so if one fails the other's results still show with a Retry for the failed one. The mock API applies the company filter on its side, as a real service would. Every result is a real link, so the arrow keys, Enter and Tab work. Opening a news result jumps to it in the Alerts and news card, because news has no page of its own. (If the Alerts chip is on and hiding that news item, the jump has nothing to land on; pick All first.)
 
 **Status and badges are derived.** An alert can say which apps it affects (`impact`). The service status strip, the red or amber badge on an app tile and the sentence under the greeting are all worked out from the alerts, never stored separately, so they cannot disagree with them. An app can say how much work is waiting for the person (`waiting`), which the greeting also sums.
 
@@ -151,7 +151,7 @@ Not built. The plan:
 
 ## Testing
 
-`yarn test` runs 192 tests with Vitest, Testing Library and axe. They cover:
+`yarn test` runs 190 tests with Vitest, Testing Library and axe. They cover:
 - pure rules: company filtering, alert sorting, search matching, contrast ratios, greeting by hour, merging alerts and news, working out which alerts affect which app;
 - hooks: loading, errors and recovery, an old response never replacing a newer one, debounce, online status, the offline cache and its failure cases, the inactivity timer;
 - whole-screen behaviour: critical alerts announced and kept after switching company, search (including one half failing and a slow old answer arriving late), offline notices, retry and recovery, shared-device sign-out clearing saved data, the demo controls, the error boundary;

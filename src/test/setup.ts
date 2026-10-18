@@ -7,4 +7,8 @@ import * as axeMatchers from 'vitest-axe/matchers'
 expect.extend(axeMatchers)
 
 // Vitest does not auto-clean rendered components between tests, so do it here.
-afterEach(() => cleanup())
+afterEach(() => {
+  cleanup()
+  // Saved offline copies must not leak from one test into the next.
+  localStorage.clear()
+})

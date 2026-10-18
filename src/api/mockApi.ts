@@ -29,7 +29,8 @@ export class ApiError extends Error {
 const simulateResponse = <T>(data: T): Promise<T> =>
   new Promise((resolve, reject) => {
     setTimeout(() => {
-      if (Math.random() < apiBehaviour.failureRate) reject(new ApiError())
+      if (!navigator.onLine) reject(new ApiError('You are offline.'))
+      else if (Math.random() < apiBehaviour.failureRate) reject(new ApiError())
       else resolve(structuredClone(data))
     }, apiBehaviour.delayMs)
   })

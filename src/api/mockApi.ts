@@ -1,6 +1,7 @@
 import { apps } from '@/config/apps'
 import { alerts, currentEmployee, news, type Employee } from '@/data/mockData'
-import type { Alert, NewsItem, PortalApp } from '@/types/portal'
+import { searchPortal, type SearchResults } from '@/lib/search'
+import type { Alert, CompanyId, NewsItem, PortalApp } from '@/types/portal'
 
 export interface ApiBehaviour {
   /** Milliseconds each call takes, to make loading states visible. */
@@ -37,3 +38,7 @@ export const fetchEmployee = (): Promise<Employee> => simulateResponse(currentEm
 export const fetchApps = (): Promise<PortalApp[]> => simulateResponse(apps)
 export const fetchAlerts = (): Promise<Alert[]> => simulateResponse(alerts)
 export const fetchNews = (): Promise<NewsItem[]> => simulateResponse(news)
+
+/** The company filter runs here, as a real search service would do it, so the browser never receives hidden content. */
+export const searchContent = (query: string, companyId: CompanyId): Promise<SearchResults> =>
+  simulateResponse(searchPortal(query, companyId, apps, news))

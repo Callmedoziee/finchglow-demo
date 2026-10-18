@@ -1,8 +1,8 @@
 import { fetchNews } from '@/api/mockApi'
 import { ErrorMessage, LoadingMessage } from '@/components/feedback'
+import { NewsCard } from '@/components/NewsCard'
 import { useCompany } from '@/context/companyContext'
 import { useAsync } from '@/hooks/useAsync'
-import { formatPublished } from '@/lib/formatPublished'
 import { filterForCompany } from '@/lib/visibility'
 
 export const NewsFeed = () => {
@@ -28,13 +28,7 @@ export const NewsFeed = () => {
           {filterForCompany(newsRequest.data, company.id)
             .sort((first, second) => second.publishedAt.localeCompare(first.publishedAt))
             .map((item) => (
-              <li key={item.id} className="rounded-lg border border-line bg-surface p-4">
-                <h3 className="text-base font-semibold">{item.title}</h3>
-                <p className="mt-1 text-sm text-muted">{item.summary}</p>
-                <p className="mt-2 text-sm text-muted">
-                  <time dateTime={item.publishedAt}>{formatPublished(item.publishedAt)}</time>
-                </p>
-              </li>
+              <NewsCard key={item.id} item={item} />
             ))}
         </ul>
       )}

@@ -59,4 +59,38 @@ describe('useCachedAsync', () => {
     act(() => finishRetry(['fresh']))
     await waitFor(() => expect(result.current).toMatchObject({ status: 'success', data: ['fresh'] }))
   })
+
+  it('keeps showing the last fresh data during a retry even when the device cannot save a copy', async () => {
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+      throw new Error('storage is full')
+    })
+    let finishRetry: (value: string[]) => void = () => {}
+    const load = vi
+      .fn()
+      .mockResolvedValueOnce(['first'])
+      .mockReturnValueOnce(new Promise<string[]>((resolve) => (finishRetry = resolve)))
+    const { result } = renderHook(() => useCachedAsync('alerts', load))
+    await waitFor(() => expect(result.current).toMatchObject({ status: 'success', data: ['first'] }))
+
+    act(() => result.current.reload())
+
+    expect(result.current).toMatchObject({ status: 'stale', data: ['first'], isRefreshing: true })
+    act(() => finishRetry(['second']))
+    await waitFor(() => expect(result.current).toMatchObject({ status: 'success', data: ['second'] }))
+    vi.restoreAllMocks()
+  })
+
+  it('falls back to the last fresh data when a refresh fails and the device cannot save a copy', async () => {
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+      throw new Error('storage is full')
+    })
+    const load = vi.fn().mockResolvedValueOnce(['first']).mockRejectedValueOnce(new Error('offline'))
+    const { result } = renderHook(() => useCachedAsync('alerts', load))
+    await waitFor(() => expect(result.current.status).toBe('success'))
+
+    act(() => result.current.reload())
+
+    await waitFor(() => expect(result.current).toMatchObject({ status: 'stale', data: ['first'], isRefreshing: false }))
+    vi.restoreAllMocks()
+  })
 })

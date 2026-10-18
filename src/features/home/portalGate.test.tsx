@@ -1,5 +1,6 @@
 import { act, screen } from '@testing-library/react'
-import { afterEach, describe, expect, it } from 'vitest'
+import userEvent from '@testing-library/user-event'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { configureApi } from '@/services/mockApi'
 import { requestRefresh } from '@/features/offline/refreshEvent'
 import { renderPortal } from '@/test/renderPortal'
@@ -42,5 +43,40 @@ describe('Alerts settle before the rest of the page', () => {
     expect(screen.getByRole('alert', { name: /payment gateway failure/i })).toBeInTheDocument()
     expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument()
     expect(screen.queryByText('Loading your portal...')).not.toBeInTheDocument()
+  })
+
+  it('never hides the page again on a retry, even when nothing could be saved on the device to show meanwhile', async () => {
+    // Storage that refuses to save (full or blocked) means a retry has no saved copy to fall back on,
+    // so the alerts and apps really do go back to "loading". The page must still stay.
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+      throw new Error('storage is full')
+    })
+    configureApi({ delayMs: 0, failureRate: 0 })
+    renderPortal()
+    await screen.findByRole('alert', { name: /payment gateway failure/i })
+
+    configureApi({ delayMs: 300 })
+    act(() => requestRefresh())
+
+    expect(screen.getByRole('alert', { name: /payment gateway failure/i })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument()
+    expect(screen.queryByText('Loading your portal...')).not.toBeInTheDocument()
+    vi.restoreAllMocks()
+  })
+
+  it('keeps the page and the error on screen while "Try again" runs after a first load that failed', async () => {
+    configureApi({ delayMs: 0, failureRate: 1 })
+    const user = userEvent.setup()
+    renderPortal()
+    // Nothing was ever saved, so the alerts show an error and the page is drawn around it.
+    expect(await screen.findByText(/alerts could not be loaded/i)).toBeInTheDocument()
+
+    configureApi({ delayMs: 300, failureRate: 0 })
+    await user.click(screen.getAllByRole('button', { name: /try again/i })[0])
+
+    // The retry is in flight (alerts are "loading" again with nothing to show). The page must not be hidden.
+    expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument()
+    expect(screen.queryByText('Loading your portal...')).not.toBeInTheDocument()
+    expect(await screen.findByRole('alert', { name: /payment gateway failure/i })).toBeInTheDocument()
   })
 })

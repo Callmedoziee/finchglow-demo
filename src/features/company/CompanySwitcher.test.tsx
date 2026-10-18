@@ -35,6 +35,9 @@ describe('CompanySwitcher', () => {
     const user = userEvent.setup()
     renderHeader()
     await user.click(trigger())
+    // Move focus into the list first, so that "focus is on the button" can only be true if we put it back.
+    await user.tab()
+    expect(trigger()).not.toHaveFocus()
 
     await user.keyboard('{Escape}')
 

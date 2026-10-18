@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useAsync } from '@/hooks/useAsync'
 import { loadFromCache, saveToCache } from './offlineCache'
 import { REFRESH_EVENT } from './refreshEvent'
@@ -25,6 +25,14 @@ export const useCachedAsync = <T>(cacheKey: string, loadData: () => Promise<T>):
   const { reload } = request
   const freshData = request.status === 'success' ? request.data : undefined
 
+  // Also keep the last fresh result in memory. If the device cannot save a copy (storage full or blocked, as in
+  // some private windows), this is what still shows during a retry or after a failed refresh.
+  // Setting state while rendering, guarded like this, is React's way to react to a change in what we were given.
+  const [lastFresh, setLastFresh] = useState<{ data: T; savedAt: string } | null>(null)
+  if (request.status === 'success' && lastFresh?.data !== request.data) {
+    setLastFresh({ data: request.data, savedAt: request.loadedAt })
+  }
+
   // Save every successful result so there is something to fall back on later.
   useEffect(() => {
     if (freshData !== undefined) saveToCache(cacheKey, freshData)
@@ -50,12 +58,12 @@ export const useCachedAsync = <T>(cacheKey: string, loadData: () => Promise<T>):
 
   // During a retry, keep showing the saved copy instead of blanking the page while we wait.
   if (request.status === 'loading') {
-    const saved = request.isRetry ? loadFromCache<T>(cacheKey) : null
+    const saved = request.isRetry ? (lastFresh ?? loadFromCache<T>(cacheKey)) : null
     if (saved) return { status: 'stale', data: saved.data, savedAt: saved.savedAt, isRefreshing: true, reload }
     return { status: 'loading', reload }
   }
 
-  const saved = loadFromCache<T>(cacheKey)
+  const saved = lastFresh ?? loadFromCache<T>(cacheKey)
   if (saved) return { status: 'stale', data: saved.data, savedAt: saved.savedAt, isRefreshing: false, reload }
   return { status: 'error', error: request.error, reload }
 }

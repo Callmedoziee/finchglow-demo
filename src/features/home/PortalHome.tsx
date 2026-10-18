@@ -1,10 +1,8 @@
 import { useState } from 'react'
 import { ServiceStatus } from '@/features/alerts/ServiceStatus'
-import { AlertsFeed } from '@/features/alerts/AlertsFeed'
-import { useAlerts } from '@/features/alerts/alertsContext'
 import { Greeting } from './Greeting'
 import { LauncherSection } from '@/features/launcher/LauncherSection'
-import { NewsFeed } from '@/features/news/NewsFeed'
+import { UpdatesCard } from '@/features/updates/UpdatesCard'
 import { SearchBar } from '@/features/search/SearchBar'
 import { SearchResultsSection } from '@/features/search/SearchResultsSection'
 import { useCompany } from '@/features/company/companyContext'
@@ -16,7 +14,6 @@ const SEARCH_DELAY_MS = 250
 /** The page itself, inside <main>. The critical alert band and offline bar sit above it (see AlertsBar). */
 export const PortalHome = ({ employee }: { employee: Employee }) => {
   const { company } = useCompany()
-  const alerts = useAlerts()
   const [query, setQuery] = useState('')
   const debouncedQuery = useDebouncedValue(query.trim(), SEARCH_DELAY_MS)
   // Emptying the box returns to the normal page straight away; only typing waits for the pause.
@@ -36,9 +33,8 @@ export const PortalHome = ({ employee }: { employee: Employee }) => {
           <div className="min-w-0 lg:col-span-2">
             <LauncherSection />
           </div>
-          <div className="flex min-w-0 flex-col gap-8">
-            {alerts.status === 'success' && <AlertsFeed alerts={alerts.other} />}
-            <NewsFeed />
+          <div className="min-w-0">
+            <UpdatesCard />
           </div>
         </div>
         </>

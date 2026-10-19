@@ -40,7 +40,7 @@ I developed on Node 24 and use yarn.
 2. **Sample data is invented.** Alerts, news, apps and the employee ("Amara") are made up. This includes which apps each company gets, the "what it affects" labels on alerts (for example "Payments failing") and the "waiting for you" counts on some apps. The brief does not say which apps a company has, so that mapping is mine and lives in `configs/apps.ts`.
 3. **"Signed in" is simulated.** The mock API returns the employee, as an identity provider would after sign-in.
 4. **Brand colours.** I started from each brand's real logo colour. Where it was too light to read (below 4.5:1 against white) I darkened it, keeping the hue, so the portal meets WCAG AA. For example Travelden's orange `#f98836` is 2.4:1 on white, so the portal uses `#be5306`.
-5. **A shared device is simulated.** In a real build the device set-up or the sign-in service would say that a tablet is shared. Here `?device=shared` stands in for it, and `getSharedDevice` in `features/device/deviceConfig.ts` is the only place that knows.
+5. **A shared device is simulated.** In a real build the device set-up or the sign-in service would say that a tablet is shared. Here `?device=shared` stands in for it, and `getSharedDevice` in `features/device/helpers/deviceConfig.ts` is the only place that knows.
 6. **Third-party assets.** The icons are a few from [Lucide](https://lucide.dev) (ISC licence), copied into small components. The font is Plus Jakarta Sans (SIL Open Font Licence, licence file in `public/fonts`), self-hosted.
 
 ## What the brief asked for, and where it lives

@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { axe } from 'vitest-axe'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { configureApi } from '@/services/mockApi'
-import { renderPortal } from '@/test/renderPortal'
+import { renderPortal } from '@/test-utils/renderPortal'
 import { DemoPanel } from './DemoPanel'
 
 const renderDemo = () => renderPortal({ extra: <DemoPanel /> })

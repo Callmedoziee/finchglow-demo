@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { SearchIcon } from '@/components/icon/SearchIcon'
-import { SearchPalette } from './SearchPalette'
-import { isApplePlatform, useSearchShortcut } from './useSearchShortcut'
+import { SearchPalette } from '@/features/search/components/SearchPalette'
+import { isApplePlatform, useSearchShortcut } from '@/features/search/hooks/useSearchShortcut'
 
 /** The search field on the page. It is really a button that opens the palette; Command/Control+K does the same from anywhere. */
 export const Search = () => {

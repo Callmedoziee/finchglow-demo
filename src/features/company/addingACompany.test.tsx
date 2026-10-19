@@ -1,13 +1,13 @@
 import { render, screen } from '@testing-library/react'
-import { chooseCompany } from '@/test/chooseCompany'
+import { chooseCompany } from '@/test-utils/chooseCompany'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it } from 'vitest'
 import { Header } from '@/components/layouts/Header'
-import { AlertsProvider } from '@/features/alerts/AlertsProvider'
+import { AlertsProvider } from '@/context/AlertsProvider'
 import { companies } from '@/configs/companies'
-import { contrastRatio } from '@/theme/contrast'
+import { contrastRatio } from '@/utils/theme/contrast'
 import type { Company } from '@/types/portal'
-import { CompanyProvider } from './CompanyProvider'
+import { CompanyProvider } from '@/context/CompanyProvider'
 
 const seventhCompany: Company = {
   id: 'cargo',

@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react'
-import { chooseCompany } from '@/test/chooseCompany'
+import { chooseCompany } from '@/test-utils/chooseCompany'
 import userEvent from '@testing-library/user-event'
 import { axe } from 'vitest-axe'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'

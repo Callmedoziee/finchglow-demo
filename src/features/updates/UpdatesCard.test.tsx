@@ -2,7 +2,7 @@ import { screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { configureApi } from '@/services/mockApi'
-import { renderPortal } from '@/test/renderPortal'
+import { renderPortal } from '@/test-utils/renderPortal'
 
 beforeEach(() => configureApi({ delayMs: 0, failureRate: 0 }))
 afterEach(() => configureApi({ delayMs: 400, failureRate: 0 }))

@@ -2,11 +2,11 @@ import { act, screen, waitFor } from '@testing-library/react'
 import { axe } from 'vitest-axe'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { configureApi } from '@/services/mockApi'
-import { renderPortal } from '@/test/renderPortal'
+import { renderPortal } from '@/test-utils/renderPortal'
 import { apps } from '@/configs/apps'
 import { alerts } from '@/data/mockData'
-import { CACHE_KEYS, saveToCache } from './offlineCache'
-import { setOnline } from '@/test/network'
+import { CACHE_KEYS, saveToCache } from '@/utils/helpers/offlineCache'
+import { setOnline } from '@/test-utils/network'
 
 const renderHome = () => renderPortal()
 

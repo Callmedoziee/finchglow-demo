@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { toError } from '@/lib/toError'
+import { toError } from '@/utils/helpers/toError'
 
 export type AsyncState<T> =
   | { status: 'loading' }

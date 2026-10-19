@@ -1,4 +1,4 @@
-import { filterForCompany } from '@/lib/visibility'
+import { filterForCompany } from '@/utils/helpers/visibility'
 import type { CompanyId, NewsItem, PortalApp } from '@/types/portal'
 
 /** True when every word in the query appears somewhere in the text (case-insensitive). */

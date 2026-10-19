@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { contrastRatio } from '@/theme/contrast'
+import { contrastRatio } from '@/utils/theme/contrast'
 import type { Severity } from '@/types/portal'
 import { severityStyles } from './severity'
 

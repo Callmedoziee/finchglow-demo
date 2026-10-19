@@ -49,10 +49,10 @@ I developed on Node 24 and use yarn.
 |---|---|
 | Personalised greeting, company, launcher grid | `features/home`, `features/launcher` |
 | Alerts and news with three severities, critical impossible to miss | `features/alerts` (the red band and the service status strip), `features/updates` (the Alerts and news card) |
-| Company switcher that re-themes and filters, group alerts stay visible | `features/company`, `lib/visibility.ts` |
+| Company switcher that re-themes and filters, group alerts stay visible | `features/company`, `context/CompanyProvider.tsx`, `utils/helpers/visibility.ts` |
 | Search across apps and news with empty and loading states | `features/search`, `services/mockSearch.ts` |
 | Responsive and accessible (WCAG 2.1 AA) | whole app, notes in `docs/accessibility.md` |
-| **Extra: offline-friendly behaviour**, including a shared-device mode that clears saved data | `features/offline`, `features/device` |
+| **Extra: offline-friendly behaviour**, including a shared-device mode that clears saved data | `features/offline`, `features/device`, `hooks/useCachedAsync.ts` |
 | A seventh subsidiary by configuration, not copied code | `configs/companies.ts` |
 | Error handling and loading states, API sometimes fails | `hooks/useAsync.ts`, `components/ui` |
 | A few meaningful tests | 190 tests, next to the code they test |
@@ -63,21 +63,31 @@ I developed on Node 24 and use yarn.
 
 ```
 src/
-  features/        one folder per feature: its UI, hooks and helpers together
-    alerts/  company/  demo/  device/  home/  launcher/  news/  offline/  search/  updates/
-  components/      only things shared by several features
+  App.tsx, main.tsx
+  components/    building blocks shared by several screens
     ui/  layouts/  icon/
-  configs/         companies, apps, severity: the data that drives everything
-  services/        the mock API and its search engine
-  hooks/  lib/     genuinely shared code (useAsync, toError, visibility filter, date format)
-  data/  theme/  types/  test/
+  context/       the shared data (company, alerts, apps): each context file with its provider
+  hooks/         reusable hooks: useAsync, useCachedAsync, useOnlineStatus, useDebouncedValue, useVisibleAlerts
+  utils/
+    helpers/     small plain functions: company filter, dates, error conversion, saved-copy storage
+    theme/       applying a company's colours, and the contrast formula
+  services/      the mock API and its search matching
+  configs/       companies, apps, severity: the data that drives everything
+  data/  types/
+  test-utils/    helpers for tests (setup, rendering the page, picking a company, going offline)
+  features/      one folder per screen area
+    search/
+      Search.tsx          <- the file that says what renders; open this first
+      components/         the pieces it is built from
+      hooks/              hooks only this feature uses
+    alerts/  company/  demo/  device/  home/  launcher/  offline/  updates/   (same shape)
 ```
 
 Rules I followed:
-- A feature owns its screens, its hooks and its helpers. If someone asks "where is search?", they open `features/search`.
-- Shared folders only hold what more than one feature uses.
-- `features/home` is the one place that composes the others. `company` and `offline` depend on no other feature.
-- Tests sit next to the code. Tests that exercise several pieces together are named `*.integration.test.tsx`.
+- **In a feature, the file at the top level is what renders.** Its `components/`, `hooks/` and `helpers/` folders are the building blocks. If someone asks "where is search?", they open `features/search/Search.tsx`.
+- **Shared things live in the global folders:** reusable hooks in `hooks/`, plain functions in `utils/helpers/`, shared data in `context/`. If only one feature uses something, it stays inside that feature.
+- `features/home` composes the others, and nothing depends on `home`. A few features reuse a small piece of another (the launcher uses the alerts' `incidentFor`, search uses the launcher's icon lookup, the alert band uses the offline bar).
+- Tests sit next to the code they test. Tests that exercise several pieces together are named `*.integration.test.tsx`. `test-utils/` holds the helpers the tests share, not tests.
 - Imports across folders use the `@/` alias (`@/features/search/Search`). Files in the same folder use `./`.
 
 ### How the main ideas work

@@ -1,9 +1,9 @@
-import { ServiceStatus } from '@/features/alerts/ServiceStatus'
+import { ServiceStatus } from '@/features/alerts/components/ServiceStatus'
 import type { Employee } from '@/data/mockData'
 import { LauncherSection } from '@/features/launcher/LauncherSection'
 import { Search } from '@/features/search/Search'
 import { UpdatesCard } from '@/features/updates/UpdatesCard'
-import { Greeting } from './Greeting'
+import { Greeting } from '@/features/home/components/Greeting'
 
 /** The page itself, inside <main>. The critical alert band and offline bar sit above it (see AlertsBar). */
 export const PortalHome = ({ employee }: { employee: Employee }) => (

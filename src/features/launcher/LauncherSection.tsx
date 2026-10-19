@@ -1,13 +1,13 @@
 import { ErrorMessage, LoadingMessage } from '@/components/ui/feedback'
-import { useAlerts } from '@/features/alerts/alertsContext'
-import { incidentFor } from '@/features/alerts/incidentFor'
-import { useCompany } from '@/features/company/companyContext'
-import { StaleNotice } from '@/features/offline/StaleNotice'
-import { useOnlineStatus } from '@/features/offline/useOnlineStatus'
-import { filterForCompany } from '@/lib/visibility'
+import { useAlerts } from '@/context/alertsContext'
+import { incidentFor } from '@/features/alerts/helpers/incidentFor'
+import { useCompany } from '@/context/companyContext'
+import { StaleNotice } from '@/components/ui/StaleNotice'
+import { useOnlineStatus } from '@/hooks/useOnlineStatus'
+import { filterForCompany } from '@/utils/helpers/visibility'
 import type { PortalApp } from '@/types/portal'
-import { AppTile } from './AppTile'
-import { useApps } from './appsContext'
+import { AppTile } from '@/features/launcher/components/AppTile'
+import { useApps } from '@/context/appsContext'
 
 /** The launcher grid: the apps the selected company can open, each with any incident or waiting work. */
 export const LauncherSection = () => {

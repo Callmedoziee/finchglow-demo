@@ -3,7 +3,7 @@ import { CheckIcon } from '@/components/icon/CheckIcon'
 import { ChevronsUpDownIcon } from '@/components/icon/ChevronsUpDownIcon'
 import { CompanyLogo } from '@/components/ui/CompanyLogo'
 import { companies } from '@/configs/companies'
-import { useCompany } from './companyContext'
+import { useCompany } from '@/context/companyContext'
 
 /**
  * A button that opens a small panel of companies (the "disclosure" pattern).

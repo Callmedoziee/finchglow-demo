@@ -1,7 +1,7 @@
 import { CompanyLogo } from '@/components/ui/CompanyLogo'
 import { CompanySwitcher } from '@/features/company/CompanySwitcher'
-import { SyncStatus } from '@/features/offline/SyncStatus'
-import { useCompany } from '@/features/company/companyContext'
+import { SyncStatus } from '@/features/offline/components/SyncStatus'
+import { useCompany } from '@/context/companyContext'
 
 export const Header = () => {
   const { company } = useCompany()

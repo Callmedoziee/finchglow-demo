@@ -1,13 +1,13 @@
 import { render, screen } from '@testing-library/react'
-import { chooseCompany } from '@/test/chooseCompany'
+import { chooseCompany } from '@/test-utils/chooseCompany'
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { configureApi } from '@/services/mockApi'
-import { AlertsProvider } from '@/features/alerts/AlertsProvider'
-import { AppsProvider } from './AppsProvider'
+import { AlertsProvider } from '@/context/AlertsProvider'
+import { AppsProvider } from '@/context/AppsProvider'
 import { LauncherSection } from './LauncherSection'
 import { CompanySwitcher } from '@/features/company/CompanySwitcher'
-import { CompanyProvider } from '@/features/company/CompanyProvider'
+import { CompanyProvider } from '@/context/CompanyProvider'
 
 const renderLauncher = (companyId: string) =>
   render(

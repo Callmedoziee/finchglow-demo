@@ -1,5 +1,5 @@
-import { useIdleSignOut } from './useIdleSignOut'
-import type { SharedDevice } from './deviceConfig'
+import { useIdleSignOut } from '@/features/device/hooks/useIdleSignOut'
+import type { SharedDevice } from '@/features/device/helpers/deviceConfig'
 
 interface Props {
   device: SharedDevice

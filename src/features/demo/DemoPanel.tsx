@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { configureApi, getApiBehaviour, type ApiBehaviour } from '@/services/mockApi'
-import { requestRefresh } from '@/features/offline/refreshEvent'
+import { requestRefresh } from '@/utils/helpers/refreshEvent'
 
 const NORMAL_DELAY_MS = 400
 const SLOW_DELAY_MS = 3000

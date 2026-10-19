@@ -1,8 +1,8 @@
 import { ErrorMessage } from '@/components/ui/feedback'
 import { OfflineBanner } from '@/features/offline/OfflineBanner'
-import { StaleNotice } from '@/features/offline/StaleNotice'
-import { useAlerts } from './alertsContext'
-import { CriticalAlert } from './CriticalAlert'
+import { StaleNotice } from '@/components/ui/StaleNotice'
+import { useAlerts } from '@/context/alertsContext'
+import { CriticalAlert } from '@/features/alerts/components/CriticalAlert'
 
 /**
  * Everything that must be seen first, in full-width bands under the header and above the page:

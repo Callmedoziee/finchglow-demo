@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it } from 'vitest'
-import { setOnline } from '@/test/network'
+import { setOnline } from '@/test-utils/network'
 import { ApiError, configureApi, fetchAlerts } from './mockApi'
 
 afterEach(() => {

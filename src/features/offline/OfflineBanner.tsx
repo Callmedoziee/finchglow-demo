@@ -1,8 +1,8 @@
-import { useAlerts } from '@/features/alerts/alertsContext'
+import { useAlerts } from '@/context/alertsContext'
 import { OfflineIcon } from '@/components/icon/OfflineIcon'
-import { formatTimeOfDay } from '@/lib/formatPublished'
-import { useOnlineStatus } from './useOnlineStatus'
-import { requestRefresh } from './refreshEvent'
+import { formatTimeOfDay } from '@/utils/helpers/formatPublished'
+import { useOnlineStatus } from '@/hooks/useOnlineStatus'
+import { requestRefresh } from '@/utils/helpers/refreshEvent'
 
 /**
  * A full-width dark bar under the header while the device is offline.

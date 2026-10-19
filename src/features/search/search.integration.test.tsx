@@ -3,8 +3,8 @@ import userEvent from '@testing-library/user-event'
 import { axe } from 'vitest-axe'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { configureApi } from '@/services/mockApi'
-import { chooseCompany } from '@/test/chooseCompany'
-import { renderPortal } from '@/test/renderPortal'
+import { chooseCompany } from '@/test-utils/chooseCompany'
+import { renderPortal } from '@/test-utils/renderPortal'
 
 const openPalette = async (user = userEvent.setup()) => {
   await user.click(await screen.findByRole('button', { name: /search apps and news/i }))

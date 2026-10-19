@@ -1,7 +1,7 @@
 import { ErrorMessage } from '@/components/ui/feedback'
 import { OfflineBanner } from '@/features/offline/OfflineBanner'
 import { StaleNotice } from '@/components/ui/StaleNotice'
-import { useAlerts } from '@/context/alertsContext'
+import { useAlerts } from '@/utils/context/alertsContext'
 import { CriticalAlert } from '@/features/alerts/components/CriticalAlert'
 
 /**

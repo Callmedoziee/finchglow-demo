@@ -1,7 +1,7 @@
-import { useAlerts } from '@/context/alertsContext'
+import { useAlerts } from '@/utils/context/alertsContext'
 import { severityStyles } from '@/configs/severity'
-import { useCompany } from '@/context/companyContext'
-import { useApps } from '@/context/appsContext'
+import { useCompany } from '@/utils/context/companyContext'
+import { useApps } from '@/utils/context/appsContext'
 import { filterForCompany } from '@/utils/helpers/visibility'
 
 const dotClass = { critical: 'bg-critical', warning: 'bg-warning', information: 'bg-accent' } as const

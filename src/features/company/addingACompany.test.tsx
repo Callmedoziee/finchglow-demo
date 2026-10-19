@@ -3,11 +3,11 @@ import { chooseCompany } from '@/test-utils/chooseCompany'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it } from 'vitest'
 import { Header } from '@/components/layouts/Header'
-import { AlertsProvider } from '@/context/AlertsProvider'
+import { AlertsProvider } from '@/utils/context/AlertsProvider'
 import { companies } from '@/configs/companies'
-import { contrastRatio } from '@/utils/theme/contrast'
+import { contrastRatio } from '@/utils/helpers/contrast'
 import type { Company } from '@/types/portal'
-import { CompanyProvider } from '@/context/CompanyProvider'
+import { CompanyProvider } from '@/utils/context/CompanyProvider'
 
 const seventhCompany: Company = {
   id: 'cargo',

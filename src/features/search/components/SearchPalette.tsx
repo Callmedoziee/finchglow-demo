@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState, type KeyboardEvent } from 'react'
 import { SearchIcon } from '@/components/icon/SearchIcon'
-import { useCompany } from '@/context/companyContext'
+import { useCompany } from '@/utils/context/companyContext'
 import { SearchResults } from './SearchResults'
-import { useDebouncedValue } from '@/hooks/useDebouncedValue'
+import { useDebouncedValue } from '@/utils/hooks/useDebouncedValue'
 
 const SEARCH_DELAY_MS = 250
 

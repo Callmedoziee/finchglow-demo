@@ -3,11 +3,11 @@ import { chooseCompany } from '@/test-utils/chooseCompany'
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { configureApi } from '@/services/mockApi'
-import { AlertsProvider } from '@/context/AlertsProvider'
-import { AppsProvider } from '@/context/AppsProvider'
+import { AlertsProvider } from '@/utils/context/AlertsProvider'
+import { AppsProvider } from '@/utils/context/AppsProvider'
 import { LauncherSection } from './LauncherSection'
 import { CompanySwitcher } from '@/features/company/CompanySwitcher'
-import { CompanyProvider } from '@/context/CompanyProvider'
+import { CompanyProvider } from '@/utils/context/CompanyProvider'
 
 const renderLauncher = (companyId: string) =>
   render(

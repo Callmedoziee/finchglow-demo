@@ -1,5 +1,5 @@
 import { fetchAlerts } from '@/services/mockApi'
-import { useCompany } from '@/context/companyContext'
+import { useCompany } from '@/utils/context/companyContext'
 import { useCachedAsync } from './useCachedAsync'
 import { CACHE_KEYS } from '@/utils/helpers/offlineCache'
 import { filterForCompany, sortAlerts } from '@/utils/helpers/visibility'

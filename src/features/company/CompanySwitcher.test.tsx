@@ -3,8 +3,8 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { axe } from 'vitest-axe'
 import { Header } from '@/components/layouts/Header'
-import { AlertsProvider } from '@/context/AlertsProvider'
-import { CompanyProvider } from '@/context/CompanyProvider'
+import { AlertsProvider } from '@/utils/context/AlertsProvider'
+import { CompanyProvider } from '@/utils/context/CompanyProvider'
 
 const renderHeader = () =>
   render(

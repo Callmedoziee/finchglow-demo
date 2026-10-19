@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react'
-import type { CachedState } from '@/hooks/useCachedAsync'
+import type { CachedState } from '@/utils/hooks/useCachedAsync'
 import type { PortalApp } from '@/types/portal'
 
 export type AppsState = CachedState<PortalApp[]> & { reload: () => void }

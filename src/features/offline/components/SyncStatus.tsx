@@ -1,6 +1,6 @@
-import { useAlerts } from '@/context/alertsContext'
+import { useAlerts } from '@/utils/context/alertsContext'
 import { formatTimeOfDay } from '@/utils/helpers/formatPublished'
-import { useOnlineStatus } from '@/hooks/useOnlineStatus'
+import { useOnlineStatus } from '@/utils/hooks/useOnlineStatus'
 
 /** A small chip in the header: "Online · synced 09:41" or "Offline · saved 09:41". Text carries the meaning; the dot is decoration. */
 export const SyncStatus = () => {

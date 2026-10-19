@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import { fetchApps } from '@/services/mockApi'
 import { CACHE_KEYS } from '@/utils/helpers/offlineCache'
-import { useCachedAsync } from '@/hooks/useCachedAsync'
+import { useCachedAsync } from '@/utils/hooks/useCachedAsync'
 import { AppsContext } from './appsContext'
 
 /**

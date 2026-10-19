@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { AlertsContext } from './alertsContext'
-import { useVisibleAlerts } from '@/hooks/useVisibleAlerts'
+import { useVisibleAlerts } from '@/utils/hooks/useVisibleAlerts'
 
 /**
  * Loads the alerts once and shares them. The critical band (above the page), the sync chip (in the header)

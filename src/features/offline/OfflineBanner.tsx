@@ -1,7 +1,7 @@
-import { useAlerts } from '@/context/alertsContext'
+import { useAlerts } from '@/utils/context/alertsContext'
 import { OfflineIcon } from '@/components/icon/OfflineIcon'
 import { formatTimeOfDay } from '@/utils/helpers/formatPublished'
-import { useOnlineStatus } from '@/hooks/useOnlineStatus'
+import { useOnlineStatus } from '@/utils/hooks/useOnlineStatus'
 import { requestRefresh } from '@/utils/helpers/refreshEvent'
 
 /**

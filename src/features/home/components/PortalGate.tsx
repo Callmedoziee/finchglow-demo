@@ -1,7 +1,7 @@
 import { useState, type ReactNode } from 'react'
 import { LoadingMessage } from '@/components/ui/feedback'
-import { useAlerts } from '@/context/alertsContext'
-import { useApps } from '@/context/appsContext'
+import { useAlerts } from '@/utils/context/alertsContext'
+import { useApps } from '@/utils/context/appsContext'
 import { useHasElapsed } from '@/features/home/hooks/useHasElapsed'
 
 /** The longest we hold the page back while waiting for the alerts and the apps. */

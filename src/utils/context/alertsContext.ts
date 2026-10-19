@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react'
-import type { VisibleAlerts } from '@/hooks/useVisibleAlerts'
+import type { VisibleAlerts } from '@/utils/hooks/useVisibleAlerts'
 
 export const AlertsContext = createContext<VisibleAlerts | null>(null)
 

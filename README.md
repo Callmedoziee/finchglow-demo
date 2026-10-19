@@ -49,12 +49,12 @@ I developed on Node 24 and use yarn.
 |---|---|
 | Personalised greeting, company, launcher grid | `features/home`, `features/launcher` |
 | Alerts and news with three severities, critical impossible to miss | `features/alerts` (the red band and the service status strip), `features/updates` (the Alerts and news card) |
-| Company switcher that re-themes and filters, group alerts stay visible | `features/company`, `context/CompanyProvider.tsx`, `utils/helpers/visibility.ts` |
+| Company switcher that re-themes and filters, group alerts stay visible | `features/company`, `utils/context/CompanyProvider.tsx`, `utils/helpers/visibility.ts` |
 | Search across apps and news with empty and loading states | `features/search`, `services/mockSearch.ts` |
 | Responsive and accessible (WCAG 2.1 AA) | whole app, notes in `docs/accessibility.md` |
-| **Extra: offline-friendly behaviour**, including a shared-device mode that clears saved data | `features/offline`, `features/device`, `hooks/useCachedAsync.ts` |
+| **Extra: offline-friendly behaviour**, including a shared-device mode that clears saved data | `features/offline`, `features/device`, `utils/hooks/useCachedAsync.ts` |
 | A seventh subsidiary by configuration, not copied code | `configs/companies.ts` |
-| Error handling and loading states, API sometimes fails | `hooks/useAsync.ts`, `components/ui` |
+| Error handling and loading states, API sometimes fails | `utils/hooks/useAsync.ts`, `components/ui` |
 | A few meaningful tests | 190 tests, next to the code they test |
 | Bundle size and how it was kept small | below, and `docs/performance.md` |
 | Sign-in plan, no secrets | below |
@@ -66,11 +66,10 @@ src/
   App.tsx, main.tsx
   components/    building blocks shared by several screens
     ui/  layouts/  icon/
-  context/       the shared data (company, alerts, apps): each context file with its provider
-  hooks/         reusable hooks: useAsync, useCachedAsync, useOnlineStatus, useDebouncedValue, useVisibleAlerts
-  utils/
-    helpers/     small plain functions: company filter, dates, error conversion, saved-copy storage
-    theme/       applying a company's colours, and the contrast formula
+  utils/         everything shared that is not a screen
+    helpers/     small plain functions: company filter, dates, error conversion, saved-copy storage, colours
+    hooks/       reusable hooks: useAsync, useCachedAsync, useOnlineStatus, useDebouncedValue, useVisibleAlerts
+    context/     the shared data (company, alerts, apps): each context file with its provider
   services/      the mock API and its search matching
   configs/       companies, apps, severity: the data that drives everything
   data/  types/
@@ -85,7 +84,7 @@ src/
 
 Rules I followed:
 - **In a feature, the file at the top level is what renders.** Its `components/`, `hooks/` and `helpers/` folders are the building blocks. If someone asks "where is search?", they open `features/search/Search.tsx`.
-- **Shared things live in the global folders:** reusable hooks in `hooks/`, plain functions in `utils/helpers/`, shared data in `context/`. If only one feature uses something, it stays inside that feature.
+- **Shared things live in `utils/`:** reusable hooks in `utils/hooks`, plain functions in `utils/helpers`, shared data in `utils/context`. If only one feature uses something, it stays inside that feature (so a feature can have its own `hooks/`).
 - `features/home` composes the others, and nothing depends on `home`. A few features reuse a small piece of another (the launcher uses the alerts' `incidentFor`, search uses the launcher's icon lookup, the alert band uses the offline bar).
 - Tests sit next to the code they test. Tests that exercise several pieces together are named `*.integration.test.tsx`. `test-utils/` holds the helpers the tests share, not tests.
 - Imports across folders use the `@/` alias (`@/features/search/Search`). Files in the same folder use `./`.

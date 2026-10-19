@@ -3,11 +3,11 @@ import type { ReactNode } from 'react'
 import { Header } from '@/components/layouts/Header'
 import { currentEmployee } from '@/data/mockData'
 import { AlertsBar } from '@/features/alerts/AlertsBar'
-import { AlertsProvider } from '@/context/AlertsProvider'
-import { CompanyProvider } from '@/context/CompanyProvider'
+import { AlertsProvider } from '@/utils/context/AlertsProvider'
+import { CompanyProvider } from '@/utils/context/CompanyProvider'
 import { PortalGate } from '@/features/home/components/PortalGate'
 import { PortalHome } from '@/features/home/PortalHome'
-import { AppsProvider } from '@/context/AppsProvider'
+import { AppsProvider } from '@/utils/context/AppsProvider'
 
 /**
  * Renders the signed-in page the way App does: header, alert bands, then the page.
